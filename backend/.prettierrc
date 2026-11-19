@@ -1,0 +1,15 @@
+{
+  "semi": true,
+  "trailingComma": "all",
+  "singleQuote": false,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "importOrder": ["^@nestjs/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "parser": "typescript",
+  "endOfLine": "auto"
+}

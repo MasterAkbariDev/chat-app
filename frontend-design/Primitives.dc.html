@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Sora:wght@600;700&display=swap">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Vazirmatn',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .disp{font-family:'Sora','Vazirmatn',sans-serif;}
+  a{color:{{t.a1}};}
+  .swatch{transition:transform 160ms cubic-bezier(.34,1.56,.64,1);}
+  .swatch:active{transform:scale(.9);}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</helmet>
+
+<div style="padding:32px 40px;display:flex;flex-direction:column;gap:32px;max-width:900px;background:{{t.bg}};color:{{t.fg}}">
+
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div class="disp" style="font-size:22px;line-height:28px;font-weight:700">Design primitives</div>
+    <div style="font-size:13px;line-height:18px;color:{{t.muted}}">Signature language: 30% squircles (not circles), spine-connected message runs, gradient-wash surfaces, spring motion. Click a swatch below to preview a theme.</div>
+  </div>
+
+  <!-- Themes -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">Themes — 5 distinct moods, not just an accent-hue swap</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <sc-for list="{{themes}}" as="th">
+        <div onClick="{{th.select}}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+          <div class="swatch" style="width:48px;height:48px;border-radius:30%;background:{{th.swatch}};border:{{th.ring}}"></div>
+          <div style="font-size:11px;color:{{th.labelColor}};font-weight:{{th.labelWeight}}">{{th.label}}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">Button</div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+      <div style="height:44px;padding:0 18px;border-radius:14px;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});color:#fff;display:flex;align-items:center;font-size:15px;font-weight:500;box-shadow:0 8px 20px {{t.a1}}40">Primary</div>
+      <div style="height:36px;padding:0 14px;border-radius:11px;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});color:#fff;display:flex;align-items:center;font-size:13px;font-weight:500;">Primary sm</div>
+      <div style="height:44px;padding:0 18px;border-radius:14px;background:transparent;border:1px solid {{t.border}};color:{{t.fg}};display:flex;align-items:center;font-size:15px;font-weight:500;">Subtle</div>
+      <div style="height:44px;padding:0 18px;border-radius:14px;background:transparent;color:{{t.muted}};display:flex;align-items:center;font-size:15px;font-weight:500;">Ghost</div>
+      <div style="height:44px;padding:0 18px;border-radius:14px;background:#ef444422;color:#ef4444;display:flex;align-items:center;font-size:15px;font-weight:500;">Danger</div>
+    </div>
+  </div>
+
+  <!-- Icon buttons + squircle avatars -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">IconButton & Avatar — 30% radius squircle, not a circle</div>
+    <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+      <div style="width:40px;height:40px;border-radius:30%;background:{{t.surface2}};display:flex;align-items:center;justify-content:center;color:{{t.fg}}">
+        <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg>
+      </div>
+      <div style="position:relative;width:56px;height:56px">
+        <div style="width:56px;height:56px;border-radius:30%;background:linear-gradient(135deg,#818cf8,#c084fc);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:20px;">M</div>
+        <div style="position:absolute;bottom:1px;right:1px;width:14px;height:14px;border-radius:999px;background:#10b981;border:2px solid {{t.surface}}"></div>
+      </div>
+      <div style="width:40px;height:40px;border-radius:30%;background:linear-gradient(135deg,#f59e0b,#f97316);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:15px;">R</div>
+      <div style="width:32px;height:32px;border-radius:30%;background:linear-gradient(135deg,#10b981,#06b6d4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:13px;">S</div>
+    </div>
+  </div>
+
+  <!-- Fields -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">Field / Input</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:6px;width:220px">
+        <div style="font-size:13px;line-height:18px;font-weight:500">Username</div>
+        <div style="height:44px;border-radius:14px;border:1.5px solid {{t.a1}};box-shadow:0 0 0 3px {{t.a1}}22;background:{{t.surface}};display:flex;align-items:center;padding:0 12px;font-size:15px">amirali</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;width:220px">
+        <div style="font-size:13px;line-height:18px;font-weight:500">Email</div>
+        <div style="height:44px;border-radius:14px;border:1px solid #ef4444;background:{{t.surface}};display:flex;align-items:center;padding:0 12px;font-size:15px;color:{{t.muted}}">you@example.com</div>
+        <div style="font-size:11px;line-height:14px;color:#ef4444">Enter a valid email address</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bubble + spine -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">Bubble — spine replaces repeated avatars in a grouped run</div>
+    <div style="display:flex;gap:10px;max-width:340px">
+      <div style="width:26px;height:26px;border-radius:30%;background:linear-gradient(135deg,#818cf8,#c084fc);flex-shrink:0"></div>
+      <div style="position:relative;display:flex;flex-direction:column;gap:8px;padding-inline-start:12px">
+        <div style="position:absolute;left:0;top:2px;bottom:20px;width:2px;border-radius:2px;background:linear-gradient(180deg,{{t.a1}},transparent)"></div>
+        <div style="font-size:12px;font-weight:700;color:{{t.a1}}">Dad</div>
+        <div style="background:{{t.bubbleOther}};border:1px solid {{t.border}};border-radius:22px 22px 22px 6px;padding:10px 14px;font-size:15px;line-height:22px">Dinner's at 8 tonight 🍝</div>
+        <div style="background:{{t.bubbleOther}};border:1px solid {{t.border}};border-radius:6px 22px 22px 22px;padding:10px 14px;font-size:15px;line-height:22px">Bring your appetite</div>
+      </div>
+    </div>
+    <div style="align-self:flex-end;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});color:#fff;border-radius:22px 6px 22px 22px;padding:10px 14px;font-size:15px;line-height:22px;box-shadow:0 6px 16px {{t.a1}}35;width:fit-content">Perfect, see you then</div>
+  </div>
+
+  <!-- Swipe actions -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">Swipe actions — conversation rows &amp; message bubbles both support drag-to-reveal</div>
+    <div style="position:relative;width:320px;border-radius:16px;overflow:hidden;border:1px solid {{t.border}}">
+      <div style="position:absolute;inset:0 0 0 auto;width:140px;display:flex">
+        <div style="flex:1;background:{{t.a1}};display:flex;align-items:center;justify-content:center;color:#fff"><svg width="16" height="16" viewBox="0 0 20 20" fill="#fff"><path d="M10 2a4 4 0 0 0-4 4c0 3 4 8 4 8s4-5 4-8a4 4 0 0 0-4-4z"/></svg></div>
+        <div style="flex:1;background:#64748b;display:flex;align-items:center;justify-content:center;color:#fff"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"><path d="M4 10a6 6 0 0 1 12 0v3M10 4v2"/><line x1="3" y1="3" x2="17" y2="17"/></svg></div>
+        <div style="flex:1;background:#ef4444;display:flex;align-items:center;justify-content:center;color:#fff"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="3" rx="1"/><path d="M4 8h12l-1 8H5z"/></svg></div>
+      </div>
+      <div style="position:relative;transform:translateX(-70px);background:{{t.surface}};padding:12px;display:flex;align-items:center;gap:10px">
+        <div style="width:40px;height:40px;border-radius:30%;background:linear-gradient(135deg,#f59e0b,#f97316);flex-shrink:0"></div>
+        <div style="font-size:14px;font-weight:500">← dragged mid-swipe</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty + skeleton -->
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+    <div style="display:flex;flex-direction:column;gap:10px;flex:1;min-width:220px">
+      <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">EmptyState</div>
+      <div style="border-radius:22px;border:1px solid {{t.border}};background:{{t.surface}};padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+        <svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.4"><path d="M3 6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H8l-4 3v-3H5a2 2 0 0 1-2-2z"/></svg>
+        <div style="font-size:15px;font-weight:500">No conversations yet</div>
+        <div style="height:36px;padding:0 16px;border-radius:11px;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});color:#fff;display:flex;align-items:center;font-size:13px;font-weight:500;">Start one</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;flex:1;min-width:220px">
+      <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">Skeleton</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:40px;height:40px;border-radius:30%;background:{{t.surface2}}"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+            <div style="height:10px;width:60%;border-radius:4px;background:{{t.surface2}}"></div>
+            <div style="height:8px;width:85%;border-radius:4px;background:{{t.surface2}}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}}">Toast</div>
+    <div style="width:fit-content;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;background:{{t.fg}};color:{{t.bg}};box-shadow:0 8px 30px rgba(0,0,0,.16);font-size:13px;">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><polyline points="7,10 9,12.5 13,7.5"/></svg>
+      Message sent
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"daybreak","options":["daybreak","aurora","meadow","midnightRose","mono"],"section":"Theme"}}'>
+const THEMES = {
+  daybreak:     { label:'Daybreak', bg:'#fbf7f2', surface:'#ffffff', surface2:'#f4ede4', fg:'#241c15', muted:'#8a7b6c', border:'#ece1d3', a1:'#fb7185', a2:'#f59e0b', bubbleOther:'#ffffff' },
+  aurora:       { label:'Aurora',   bg:'#0f1220', surface:'#171a2b', surface2:'#1f2338', fg:'#eef0fb', muted:'#8b90b8', border:'#2a2f4a', a1:'#8b5cf6', a2:'#22d3ee', bubbleOther:'#1f2338' },
+  meadow:       { label:'Meadow',   bg:'#f2f8f4', surface:'#ffffff', surface2:'#e7f3ea', fg:'#132318', muted:'#6f8a78', border:'#dcebe0', a1:'#0d9488', a2:'#84cc16', bubbleOther:'#ffffff' },
+  midnightRose: { label:'Rose',     bg:'#180f1c', surface:'#231729', surface2:'#2c1d34', fg:'#f6ecf7', muted:'#a389ac', border:'#392a42', a1:'#c026d3', a2:'#fb7185', bubbleOther:'#2c1d34' },
+  mono:         { label:'Mono',     bg:'#f4f3ef', surface:'#fffdf9', surface2:'#eae8e1', fg:'#18181b', muted:'#71717a', border:'#e0ded5', a1:'#27272a', a2:'#71717a', bubbleOther:'#fffdf9' },
+};
+
+class Component extends DCLogic {
+  renderVals() {
+    const key = this.props.theme ?? 'daybreak';
+    const setTheme = (k) => this.setState({ themeOverride: k });
+    const activeKey = this.state.themeOverride ?? key;
+    const active = THEMES[activeKey] ?? THEMES.daybreak;
+
+    const themes = Object.entries(THEMES).map(([k, def]) => ({
+      select: () => setTheme(k),
+      swatch: `linear-gradient(135deg,${def.a1},${def.a2})`,
+      ring: k === activeKey ? `2px solid ${active.a1}` : `2px solid transparent`,
+      labelColor: k === activeKey ? active.a1 : active.muted,
+      labelWeight: k === activeKey ? 700 : 500,
+      label: def.label,
+    }));
+
+    return { t: active, themes };
+  }
+}
+</script>
+</body>
+</html>

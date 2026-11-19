@@ -1,0 +1,37 @@
+# Dependencies and build output
+node_modules/
+.next/
+dist/
+build/
+out/
+coverage/
+*.tsbuildinfo
+.vercel
+
+# Environment and credentials (each app ships a tracked .env.example)
+.env
+.env.*
+!.env.example
+backend/secrets/
+backend/livekit.yaml
+firebase.json
+*.pem
+
+# Runtime data
+uploads/
+*.log
+logs/
+
+# Local tooling, scratch output and personal files
+.DS_Store
+.playwright-mcp/
+.claude/settings.local.json
+frontend/.lighthouse/
+frontend/scripts/.tmp-*
+resume-screenshots/
+init-prompt.txt
+frontend/test-results/
+frontend/playwright-report/
+.claude/scheduled_tasks.lock
+deploy/server/livekit.yaml
+deploy/server/secrets/

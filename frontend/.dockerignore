@@ -1,0 +1,44 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build output
+.next
+out
+*.tsbuildinfo
+
+# Git
+.git
+.gitignore
+
+# IDE and OS
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Env (real values come in as build ARGs / the container's own env, never
+# baked in from a local .env file — see Dockerfile)
+.env
+.env.*
+!.env.example
+
+# Tests and tooling
+e2e
+test-results
+playwright-report
+*.test.ts
+playwright.config.ts
+vitest.config.mts
+.eslintrc*
+
+# Docs and misc
+README.md
+*.md
+.dockerignore
+Dockerfile

@@ -1,0 +1,273 @@
+/* Admin panel: table-first and dense. Colours are tokens so light and dark stay in step. */
+:root {
+  color-scheme: light dark;
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1a1d21;
+  --muted: #5f6772;
+  --border: #d9dde3;
+  --accent: #2456d6;
+  --danger: #b42318;
+  --warn: #9a6700;
+  --ok: #17703c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418;
+    --surface: #1a1e24;
+    --text: #e6e9ee;
+    --muted: #9aa3ad;
+    --border: #2d333b;
+    --accent: #7aa2ff;
+    --danger: #ff8a80;
+    --warn: #f0b429;
+    --ok: #6fd393;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #111418;
+  --surface: #1a1e24;
+  --text: #e6e9ee;
+  --muted: #9aa3ad;
+  --border: #2d333b;
+  --accent: #7aa2ff;
+  --danger: #ff8a80;
+  --warn: #f0b429;
+  --ok: #6fd393;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+a {
+  color: var(--accent);
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0 0 16px;
+}
+
+h2 {
+  font-size: 15px;
+  margin: 24px 0 8px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.error {
+  color: var(--danger);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.topbar nav {
+  display: flex;
+  gap: 14px;
+}
+
+.topbar nav a {
+  text-decoration: none;
+  color: var(--text);
+}
+
+.topbar .spacer {
+  flex: 1;
+}
+
+.page {
+  padding: 16px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 6px 24px;
+}
+
+.kv dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.kv dd {
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+.toolbar label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  min-width: 0;
+}
+
+button,
+.button {
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  padding: 7px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+button.secondary,
+.button.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+th {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+td.wrap {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+
+.badge.active {
+  color: var(--ok);
+}
+
+.badge.suspended {
+  color: var(--warn);
+}
+
+.badge.deleted {
+  color: var(--danger);
+}
+
+.pager {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.login {
+  max-width: 360px;
+  margin: 12vh auto;
+  padding: 0 16px;
+}
+
+.login form {
+  display: grid;
+  gap: 12px;
+}
+
+.login label {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.login input {
+  font-size: 15px;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 12px 16px;
+  }
+}

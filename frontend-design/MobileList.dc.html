@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Sora:wght@600;700&display=swap">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Vazirmatn',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .disp{font-family:'Sora','Vazirmatn',sans-serif;}
+  @keyframes riseIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes popIn{from{opacity:0;transform:scale(0) rotate(-8deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+  @keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(16,185,129,.55)}70%{box-shadow:0 0 0 6px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+  .row{animation:riseIn 320ms cubic-bezier(.16,1,.3,1) both;}
+  .fab{animation:popIn 420ms cubic-bezier(.34,1.56,.64,1) both;animation-delay:280ms;}
+  .pulse{animation:pulseRing 2.2s ease-out infinite;}
+  .pressable{transition:transform 140ms cubic-bezier(.34,1.56,.64,1);}
+  .pressable:active{transform:scale(.9);}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</helmet>
+
+<div style="width:390px;height:844px;background:{{t.surface}};color:{{t.fg}};display:flex;flex-direction:column;overflow:hidden;position:relative">
+  <div class="grain"></div>
+
+  <div style="flex-shrink:0;padding:14px 16px 10px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(160deg,{{t.a1}}1f,transparent 65%)">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="disp" style="font-size:19px;line-height:24px;font-weight:700;letter-spacing:-.01em">Chats</div>
+      <div style="width:34px;height:34px;border-radius:30%;background:linear-gradient(135deg,#818cf8,#c084fc)"></div>
+    </div>
+    <div style="height:40px;border-radius:16px;background:{{t.surface2}};display:flex;align-items:center;gap:8px;padding:0 14px;color:{{t.muted}}">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg>
+      <span style="font-size:14px">Search</span>
+    </div>
+    <div style="position:relative;display:flex;gap:2px">
+      <div style="position:absolute;top:0;bottom:0;left:0;width:25%;border-radius:999px;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});transition:transform 320ms cubic-bezier(.16,1,.3,1);transform:translateX({{folderPx}}%);z-index:0"></div>
+      <sc-for list="{{folders}}" as="f">
+        <div onClick="{{f.select}}" style="position:relative;z-index:1;flex:1;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:{{f.color}}">{{f.label}}</div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column">
+    <sc-for list="{{rows}}" as="row" hint-placeholder-count="5">
+      <div class="row" style="position:relative;overflow:hidden;animation-delay:{{row.delay}}ms">
+        <div style="position:absolute;inset:0 0 0 auto;width:150px;display:flex">
+          <div onClick="{{row.onPin}}" style="flex:1;background:{{t.a1}};display:flex;align-items:center;justify-content:center;color:#fff">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="#fff"><path d="M10 2a4 4 0 0 0-4 4c0 3 4 8 4 8s4-5 4-8a4 4 0 0 0-4-4z"/></svg>
+          </div>
+          <div onClick="{{row.onMute}}" style="flex:1;background:#64748b;display:flex;align-items:center;justify-content:center;color:#fff">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"><path d="M4 10a6 6 0 0 1 12 0v3M10 4v2"/><line x1="3" y1="3" x2="17" y2="17"/></svg>
+          </div>
+          <div onClick="{{row.onArchive}}" style="flex:1;background:#ef4444;display:flex;align-items:center;justify-content:center;color:#fff">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="3" rx="1"/><path d="M4 8h12l-1 8H5z"/></svg>
+          </div>
+        </div>
+        <div
+          onPointerDown="{{row.onDown}}"
+          onPointerMove="{{row.onMove}}"
+          onPointerUp="{{row.onUp}}"
+          onPointerLeave="{{row.onUp}}"
+          onClick="{{row.onTap}}"
+          style="position:relative;display:flex;align-items:center;gap:12px;padding:12px 12px;background:{{t.surface}};transform:translateX({{row.tx}}px);transition:{{row.transition}};touch-action:pan-y">
+          <div style="position:relative;width:50px;height:50px;flex-shrink:0">
+            <div style="width:50px;height:50px;border-radius:30%;background:{{row.avatarBg}};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600">{{row.initial}}</div>
+            <sc-if value="{{row.online}}" hint-placeholder-val="{{false}}">
+              <div class="pulse" style="position:absolute;bottom:0;right:0;width:13px;height:13px;border-radius:999px;background:#10b981;border:2px solid {{t.surface}}"></div>
+            </sc-if>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between"><div style="font-size:15px;font-weight:{{row.weight}}">{{row.title}}</div><div style="font-size:12px;color:{{t.muted}}">{{row.time}}</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
+              <div style="color:{{t.muted}};font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{row.preview}}</div>
+              <sc-if value="{{row.hasBadge}}" hint-placeholder-val="{{false}}">
+                <div style="width:19px;height:19px;border-radius:30%;background:{{row.badgeBg}};color:{{row.badgeColor}};border:{{row.badgeBorder}};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-inline-start:8px">{{row.badgeText}}</div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div class="fab pressable" style="position:absolute;right:20px;bottom:96px;width:52px;height:52px;border-radius:30%;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px {{t.a1}}55">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>
+  </div>
+
+  <div style="flex-shrink:0;height:64px;border-top:1px solid {{t.border}};display:flex;background:{{t.surface}}">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{t.a1}}">
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H8l-4 3v-3H5a2 2 0 0 1-2-2z"/></svg>
+      <span style="font-size:11px;font-weight:600">Chats</span>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{t.muted}}">
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="7" r="3.2"/><path d="M4 17c0-3 2.7-5 6-5s6 2 6 5"/></svg>
+      <span style="font-size:11px">Settings</span>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:14px;bottom:96px;font-size:10px;color:{{t.muted}};opacity:.6">← swipe a row for Pin / Mute / Archive</div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"daybreak","options":["daybreak","aurora","meadow","midnightRose","mono"],"section":"Theme"}}'>
+const THEMES = {
+  daybreak:     { bg:'#fbf7f2', surface:'#ffffff', surface2:'#f4ede4', fg:'#241c15', muted:'#8a7b6c', border:'#ece1d3', a1:'#fb7185', a2:'#f59e0b' },
+  aurora:       { bg:'#0f1220', surface:'#171a2b', surface2:'#1f2338', fg:'#eef0fb', muted:'#8b90b8', border:'#2a2f4a', a1:'#8b5cf6', a2:'#22d3ee' },
+  meadow:       { bg:'#f2f8f4', surface:'#ffffff', surface2:'#e7f3ea', fg:'#132318', muted:'#6f8a78', border:'#dcebe0', a1:'#0d9488', a2:'#84cc16' },
+  midnightRose: { bg:'#180f1c', surface:'#231729', surface2:'#2c1d34', fg:'#f6ecf7', muted:'#a389ac', border:'#392a42', a1:'#c026d3', a2:'#fb7185' },
+  mono:         { bg:'#f4f3ef', surface:'#fffdf9', surface2:'#eae8e1', fg:'#18181b', muted:'#71717a', border:'#e0ded5', a1:'#27272a', a2:'#71717a' },
+};
+const FOLDER_DEFS = ['All', 'Family', 'Groups', 'Channels'];
+const OPEN_X = -150;
+
+class Component extends DCLogic {
+  renderVals() {
+    const t = THEMES[this.props.theme] ?? THEMES.daybreak;
+    const folderIdx = this.state.folderIdx ?? 0;
+    const setFolder = (i) => this.setState({ folderIdx: i });
+    const folders = FOLDER_DEFS.map((label, i) => ({
+      label,
+      select: () => setFolder(i),
+      color: i === folderIdx ? '#ffffff' : t.muted,
+    }));
+
+    const dragId = this.state.dragId ?? null;
+    const startX = this.state.startX ?? 0;
+    const curX = this.state.curX ?? 0;
+    const openId = this.state.openId ?? null;
+
+    const closeAll = () => this.setState({ openId: null, dragId: null });
+
+    const rowDefs = [
+      { id: 'family', initial: 'F', avatarBg: 'linear-gradient(135deg,#818cf8,#c084fc)', title: 'The Family', time: '2:14 PM', preview: "Dad: Dinner's at 8 tonight", online: false, weight: 700, badge: '3' },
+      { id: 'mina', initial: 'M', avatarBg: 'linear-gradient(135deg,#f59e0b,#f97316)', title: 'Mina', time: '1:47 PM', preview: 'Voice message', online: true, weight: 700, badge: '1' },
+      { id: 'trip', initial: 'W', avatarBg: 'linear-gradient(135deg,#10b981,#06b6d4)', title: 'Weekend Trip', time: '11:02 AM', preview: 'You: Sounds great, count me in!', online: false, weight: 500, badge: null },
+      { id: 'ann', initial: 'A', avatarBg: 'linear-gradient(135deg,#64748b,#334155)', title: 'Announcements', time: 'Yesterday', preview: 'Admin: New house rules posted', online: false, weight: 700, badge: '@' },
+      { id: 'reza', initial: 'R', avatarBg: 'linear-gradient(135deg,#f472b6,#fb7185)', title: 'Reza', time: 'Yesterday', preview: 'Photo', online: false, weight: 500, badge: null },
+    ];
+
+    const rows = rowDefs.map((r, i) => {
+      const isDragging = dragId === r.id;
+      const isOpen = openId === r.id;
+      let tx = isOpen ? OPEN_X : 0;
+      if (isDragging) {
+        const base = isOpen ? OPEN_X : 0;
+        tx = Math.min(0, Math.max(OPEN_X - 20, base + (curX - startX)));
+      }
+      const hasBadge = !!r.badge;
+      const isMention = r.badge === '@';
+      return {
+        delay: i * 40,
+        tx,
+        transition: isDragging ? 'none' : 'transform 240ms cubic-bezier(.16,1,.3,1)',
+        onDown: (e) => this.setState({ dragId: r.id, startX: e.clientX, curX: e.clientX, openId: isOpen ? r.id : null }),
+        onMove: (e) => { if (dragId === r.id) this.setState({ curX: e.clientX }); },
+        onUp: () => {
+          if (dragId !== r.id) return;
+          const base = isOpen ? OPEN_X : 0;
+          const finalTx = Math.min(0, Math.max(OPEN_X - 20, base + (curX - startX)));
+          this.setState({ dragId: null, openId: finalTx < OPEN_X / 2 ? r.id : null });
+        },
+        onTap: () => { if (isOpen) closeAll(); },
+        onPin: (e) => { e?.stopPropagation?.(); closeAll(); },
+        onMute: (e) => { e?.stopPropagation?.(); closeAll(); },
+        onArchive: (e) => { e?.stopPropagation?.(); closeAll(); },
+        avatarBg: r.avatarBg,
+        initial: r.initial,
+        online: r.online,
+        title: r.title,
+        time: r.time,
+        preview: r.preview,
+        weight: r.weight,
+        hasBadge,
+        badgeText: r.badge,
+        badgeBg: isMention ? 'transparent' : t.a1,
+        badgeColor: isMention ? t.a1 : '#ffffff',
+        badgeBorder: isMention ? `1px solid ${t.a1}` : '1px solid transparent',
+      };
+    });
+
+    return { t, folders, folderPx: folderIdx * 100, rows };
+  }
+}
+</script>
+</body>
+</html>

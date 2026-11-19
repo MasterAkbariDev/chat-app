@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Sora:wght@600;700&display=swap">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Vazirmatn',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .disp{font-family:'Sora','Vazirmatn',sans-serif;}
+  @keyframes riseIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .grp{animation:riseIn 320ms cubic-bezier(.16,1,.3,1) both;}
+  .swatch{transition:transform 160ms cubic-bezier(.34,1.56,.64,1);}
+  .swatch:active{transform:scale(.9);}
+  .pressable{transition:transform 140ms cubic-bezier(.34,1.56,.64,1);}
+  .pressable:active{transform:scale(.97);}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</helmet>
+
+<div style="width:390px;height:844px;background:{{t.bg}};color:{{t.fg}};display:flex;flex-direction:column;overflow:hidden;position:relative">
+  <div class="grain"></div>
+
+  <div style="flex-shrink:0;padding:16px 16px 4px;background:linear-gradient(160deg,{{t.a1}}1a,transparent 65%)">
+    <div class="disp" style="font-size:17px;line-height:24px;font-weight:700">Settings</div>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
+
+    <div class="grp" style="background:{{t.surface}};border-radius:22px;padding:16px;display:flex;align-items:center;gap:14px;border:1px solid {{t.border}}">
+      <div style="width:56px;height:56px;border-radius:30%;background:linear-gradient(135deg,#818cf8,#c084fc);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:20px;flex-shrink:0">A</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:17px;font-weight:600">Amir Akbari</div>
+        <div style="font-size:13px;color:{{t.muted}}">@amirali</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,4 13,10 7,16"/></svg>
+    </div>
+
+    <div class="grp" style="display:flex;flex-direction:column;gap:6px;animation-delay:60ms">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}};padding:0 4px">Theme</div>
+      <div style="background:{{t.surface}};border-radius:22px;padding:14px;border:1px solid {{t.border}};display:flex;gap:12px">
+        <sc-for list="{{themes}}" as="th">
+          <div onClick="{{th.select}}" style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div class="swatch" style="width:40px;height:40px;border-radius:30%;background:{{th.swatch}};border:{{th.ring}};cursor:pointer"></div>
+            <div style="font-size:10px;color:{{th.labelColor}};font-weight:{{th.labelWeight}}">{{th.label}}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div class="grp" style="display:flex;flex-direction:column;gap:6px;animation-delay:100ms">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}};padding:0 4px">Preferences</div>
+      <div style="background:{{t.surface}};border-radius:22px;overflow:hidden;border:1px solid {{t.border}}">
+
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid {{t.border}}">
+          <div style="width:34px;height:34px;border-radius:30%;background:{{t.a1}}22;display:flex;align-items:center;justify-content:center;color:{{t.a1}};flex-shrink:0">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/></svg>
+          </div>
+          <div style="flex:1"><div style="font-size:15px;font-weight:500">Appearance</div><div style="font-size:12px;color:{{t.muted}}">Theme, wallpaper, text size</div></div>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,4 13,10 7,16"/></svg>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid {{t.border}}">
+          <div style="width:34px;height:34px;border-radius:30%;background:{{t.a2}}22;display:flex;align-items:center;justify-content:center;color:{{t.a2}};flex-shrink:0">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3a4 4 0 0 0-4 4v3l-1.5 3h11L14 10V7a4 4 0 0 0-4-4z"/><path d="M8.5 16a1.5 1.5 0 0 0 3 0"/></svg>
+          </div>
+          <div style="flex:1"><div style="font-size:15px;font-weight:500">Notifications</div><div style="font-size:12px;color:{{t.muted}}">Sounds, mentions, preview</div></div>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,4 13,10 7,16"/></svg>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
+          <div style="width:34px;height:34px;border-radius:30%;background:{{t.a1}}22;display:flex;align-items:center;justify-content:center;color:{{t.a1}};flex-shrink:0">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3l6 2v5c0 4-2.5 6.5-6 7-3.5-.5-6-3-6-7V5l6-2z"/></svg>
+          </div>
+          <div style="flex:1"><div style="font-size:15px;font-weight:500">Privacy</div><div style="font-size:12px;color:{{t.muted}}">Blocked users, presence</div></div>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,4 13,10 7,16"/></svg>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grp" style="display:flex;flex-direction:column;gap:6px;animation-delay:140ms">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}};padding:0 4px">Account</div>
+      <div style="background:{{t.surface}};border-radius:22px;overflow:hidden;border:1px solid {{t.border}}">
+
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid {{t.border}}">
+          <div style="width:34px;height:34px;border-radius:30%;background:{{t.surface2}};display:flex;align-items:center;justify-content:center;color:{{t.muted}};flex-shrink:0">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="9" width="10" height="8" rx="1.5"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/></svg>
+          </div>
+          <div style="flex:1"><div style="font-size:15px;font-weight:500">Security</div><div style="font-size:12px;color:{{t.muted}}">Password, devices</div></div>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,4 13,10 7,16"/></svg>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
+          <div style="width:34px;height:34px;border-radius:30%;background:{{t.surface2}};display:flex;align-items:center;justify-content:center;color:{{t.muted}};flex-shrink:0">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M3 8h14"/></svg>
+          </div>
+          <div style="flex:1"><div style="font-size:15px;font-weight:500">Storage & data</div><div style="font-size:12px;color:{{t.muted}}">Manage downloaded media</div></div>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,4 13,10 7,16"/></svg>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grp pressable" style="background:{{t.surface}};border-radius:22px;overflow:hidden;border:1px solid {{t.border}};animation-delay:180ms">
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;color:#ef4444;font-size:15px;font-weight:500">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/><polyline points="12,6 16,10 12,14"/><line x1="16" y1="10" x2="7.5" y2="10"/></svg>
+        Log out
+      </div>
+    </div>
+
+  </div>
+
+  <div style="flex-shrink:0;height:64px;border-top:1px solid {{t.border}};display:flex;background:{{t.surface}}">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{t.muted}}">
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H8l-4 3v-3H5a2 2 0 0 1-2-2z"/></svg>
+      <span style="font-size:11px">Chats</span>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{t.a1}}">
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="7" r="3.2"/><path d="M4 17c0-3 2.7-5 6-5s6 2 6 5"/></svg>
+      <span style="font-size:11px;font-weight:600">Settings</span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"daybreak","options":["daybreak","aurora","meadow","midnightRose","mono"],"section":"Theme"}}'>
+const THEMES = {
+  daybreak:     { label:'Daybreak',      bg:'#fbf7f2', surface:'#ffffff', surface2:'#f4ede4', fg:'#241c15', muted:'#8a7b6c', border:'#ece1d3', a1:'#fb7185', a2:'#f59e0b' },
+  aurora:       { label:'Aurora',        bg:'#0f1220', surface:'#171a2b', surface2:'#1f2338', fg:'#eef0fb', muted:'#8b90b8', border:'#2a2f4a', a1:'#8b5cf6', a2:'#22d3ee' },
+  meadow:       { label:'Meadow',        bg:'#f2f8f4', surface:'#ffffff', surface2:'#e7f3ea', fg:'#132318', muted:'#6f8a78', border:'#dcebe0', a1:'#0d9488', a2:'#84cc16' },
+  midnightRose: { label:'Rose',          bg:'#180f1c', surface:'#231729', surface2:'#2c1d34', fg:'#f6ecf7', muted:'#a389ac', border:'#392a42', a1:'#c026d3', a2:'#fb7185' },
+  mono:         { label:'Mono',          bg:'#f4f3ef', surface:'#fffdf9', surface2:'#eae8e1', fg:'#18181b', muted:'#71717a', border:'#e0ded5', a1:'#27272a', a2:'#71717a' },
+};
+
+class Component extends DCLogic {
+  renderVals() {
+    const key = this.props.theme ?? 'daybreak';
+    const t = THEMES[key] ?? THEMES.daybreak;
+    const setTheme = (k) => this.setState({ themeOverride: k });
+    const activeKey = this.state.themeOverride ?? key;
+    const active = THEMES[activeKey] ?? t;
+
+    const themes = Object.entries(THEMES).map(([k, def]) => ({
+      select: () => setTheme(k),
+      swatch: `linear-gradient(135deg,${def.a1},${def.a2})`,
+      ring: k === activeKey ? `2px solid ${active.a1}` : `2px solid transparent`,
+      labelColor: k === activeKey ? active.a1 : active.muted,
+      labelWeight: k === activeKey ? 700 : 500,
+      label: def.label,
+    }));
+
+    return { t: active, themes };
+  }
+}
+</script>
+</body>
+</html>

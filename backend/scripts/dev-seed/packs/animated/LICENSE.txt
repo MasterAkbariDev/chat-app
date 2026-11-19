@@ -1,0 +1,4 @@
+Google Noto Animated Emoji — https://googlefonts.github.io/noto-emoji-animation/
+Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+Files downloaded from fonts.gstatic.com/s/e/notoemoji/latest/<codepoint>/512.webp, unmodified.
+Attribution is also carried in the "Animated Faces" pack description.

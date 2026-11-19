@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Sora:wght@600;700&display=swap">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Vazirmatn',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .disp{font-family:'Sora','Vazirmatn',sans-serif;}
+  kbd{font-family:'Sora',sans-serif;font-size:11px;}
+  @keyframes riseIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes rowIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes caret{0%,45%{opacity:1}50%,95%{opacity:0}100%{opacity:1}}
+  .panel{animation:riseIn 260ms cubic-bezier(.16,1,.3,1) both;}
+  .r{animation:rowIn 220ms cubic-bezier(.16,1,.3,1) both;}
+  .caret{animation:caret 1.1s steps(1) infinite;}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</helmet>
+
+<div style="width:640px;height:560px;background:radial-gradient(120% 100% at 50% 0%,{{t.a1}}26,{{t.bg}} 55%);display:flex;align-items:flex-start;justify-content:center;padding-top:64px;position:relative;overflow:hidden">
+  <div class="grain"></div>
+
+  <div class="panel" style="position:relative;width:560px;max-height:460px;display:flex;flex-direction:column;border-radius:20px;overflow:hidden;background:{{t.surfaceGlass}};backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid {{t.borderGlass}};box-shadow:0 30px 60px rgba(0,0,0,.28), inset 0 1px 0 {{t.glassSheen}}">
+
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid {{t.borderGlass}}">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg>
+      <div style="flex:1;font-size:16px;color:{{t.fg}};display:flex;align-items:center">Mina<span class="caret" style="display:inline-block;width:1.5px;height:18px;background:{{t.a1}};margin-inline-start:2px"></span><span style="color:{{t.muted}}">&nbsp;— jump to a chat, person, or setting</span></div>
+      <div style="font-size:11px;color:{{t.muted}};padding:3px 8px;border-radius:7px;background:{{t.surface2}};border:1px solid {{t.borderGlass}}">esc</div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding:10px">
+
+      <div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}};padding:8px 10px 6px">Recent</div>
+
+      <sc-for list="{{recents}}" as="row" hint-placeholder-count="2">
+        <div class="r" style="display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;background:{{row.bg}};animation-delay:{{row.delay}}ms">
+          <div style="width:34px;height:34px;border-radius:30%;background:{{row.avatarBg}};flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:13px">{{row.initial}}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:600">{{row.title}}</div>
+            <div style="font-size:12px;color:{{t.muted}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{row.preview}}</div>
+          </div>
+          <div style="font-size:11px;color:{{t.muted}};padding:2px 6px;border-radius:6px;background:{{t.surface2}}">↵</div>
+        </div>
+      </sc-for>
+
+      <div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}};padding:14px 10px 6px">People &amp; channels</div>
+
+      <div class="r" style="display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;animation-delay:220ms">
+        <div style="width:34px;height:34px;border-radius:30%;background:linear-gradient(135deg,#f472b6,#fb7185);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:13px">R</div>
+        <div style="flex:1;font-size:14px;font-weight:500">Reza Karimi</div>
+        <div style="font-size:11px;color:{{t.muted}}">@reza</div>
+      </div>
+      <div class="r" style="display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;animation-delay:250ms">
+        <div style="width:34px;height:34px;border-radius:30%;background:linear-gradient(135deg,#64748b,#334155);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:13px">A</div>
+        <div style="flex:1;font-size:14px;font-weight:500">Announcements</div>
+        <div style="font-size:11px;color:{{t.muted}}">channel</div>
+      </div>
+
+      <div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}};padding:14px 10px 6px">Actions</div>
+
+      <div class="r" style="display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;animation-delay:280ms">
+        <div style="width:34px;height:34px;border-radius:30%;background:{{t.surface2}};flex-shrink:0;display:flex;align-items:center;justify-content:center;color:{{t.a1}}">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>
+        </div>
+        <div style="flex:1;font-size:14px;font-weight:500">Start a new conversation</div>
+        <div style="font-size:11px;color:{{t.muted}};padding:2px 6px;border-radius:6px;background:{{t.surface2}}">⌘N</div>
+      </div>
+      <div class="r" style="display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;animation-delay:310ms">
+        <div style="width:34px;height:34px;border-radius:30%;background:{{t.surface2}};flex-shrink:0;display:flex;align-items:center;justify-content:center;color:{{t.a1}}">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7"/></svg>
+        </div>
+        <div style="flex:1;font-size:14px;font-weight:500">Switch theme</div>
+        <div style="font-size:11px;color:{{t.muted}};padding:2px 6px;border-radius:6px;background:{{t.surface2}}">⌘T</div>
+      </div>
+
+    </div>
+
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:14px;padding:10px 18px;border-top:1px solid {{t.borderGlass}};font-size:11px;color:{{t.muted}}">
+      <span><kbd style="padding:2px 5px;border-radius:5px;background:{{t.surface2}}">↑↓</kbd>&nbsp;navigate</span>
+      <span><kbd style="padding:2px 5px;border-radius:5px;background:{{t.surface2}}">↵</kbd>&nbsp;open</span>
+      <span><kbd style="padding:2px 5px;border-radius:5px;background:{{t.surface2}}">esc</kbd>&nbsp;close</span>
+      <span style="flex:1;text-align:right;opacity:.7">⌘K anywhere</span>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"daybreak","options":["daybreak","aurora","meadow","midnightRose","mono"],"section":"Theme"}}'>
+const THEMES = {
+  daybreak:     { bg:'#fbf7f2', surface:'#ffffff', surface2:'#f1e9de', fg:'#241c15', muted:'#8a7b6c', border:'#ece1d3', a1:'#fb7185', a2:'#f59e0b', surfaceGlass:'rgba(255,255,255,.72)', borderGlass:'rgba(36,28,21,.08)', glassSheen:'rgba(255,255,255,.6)' },
+  aurora:       { bg:'#0f1220', surface:'#171a2b', surface2:'#232742', fg:'#eef0fb', muted:'#8b90b8', border:'#2a2f4a', a1:'#8b5cf6', a2:'#22d3ee', surfaceGlass:'rgba(23,26,43,.68)', borderGlass:'rgba(238,240,251,.10)', glassSheen:'rgba(255,255,255,.08)' },
+  meadow:       { bg:'#f2f8f4', surface:'#ffffff', surface2:'#e2f1e6', fg:'#132318', muted:'#6f8a78', border:'#dcebe0', a1:'#0d9488', a2:'#84cc16', surfaceGlass:'rgba(255,255,255,.72)', borderGlass:'rgba(19,35,24,.08)', glassSheen:'rgba(255,255,255,.6)' },
+  midnightRose: { bg:'#180f1c', surface:'#231729', surface2:'#301f39', fg:'#f6ecf7', muted:'#a389ac', border:'#392a42', a1:'#c026d3', a2:'#fb7185', surfaceGlass:'rgba(35,23,41,.68)', borderGlass:'rgba(246,236,247,.10)', glassSheen:'rgba(255,255,255,.08)' },
+  mono:         { bg:'#f4f3ef', surface:'#fffdf9', surface2:'#e6e4dc', fg:'#18181b', muted:'#71717a', border:'#e0ded5', a1:'#27272a', a2:'#71717a', surfaceGlass:'rgba(255,253,249,.74)', borderGlass:'rgba(24,24,27,.08)', glassSheen:'rgba(255,255,255,.6)' },
+};
+
+class Component extends DCLogic {
+  renderVals() {
+    const t = THEMES[this.props.theme] ?? THEMES.daybreak;
+    const recentDefs = [
+      { initial: 'F', avatarBg: 'linear-gradient(135deg,#818cf8,#c084fc)', title: 'The Family', preview: "Dad: Dinner's at 8 tonight", selected: true },
+      { initial: 'M', avatarBg: 'linear-gradient(135deg,#f59e0b,#f97316)', title: 'Mina', preview: 'Voice message', selected: false },
+    ];
+    const recents = recentDefs.map((r, i) => ({
+      delay: i * 30 + 40,
+      bg: r.selected ? t.surface2 : 'transparent',
+      avatarBg: r.avatarBg,
+      initial: r.initial,
+      title: r.title,
+      preview: r.preview,
+    }));
+    return { t, recents };
+  }
+}
+</script>
+</body>
+</html>

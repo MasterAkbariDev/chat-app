@@ -1,0 +1,204 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:${PORT:-3001}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL_DOCKER:-mongodb://mongodb:27017/chat?replicaSet=rs0}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      GIPHY_API_KEY: ${GIPHY_API_KEY:-}
+      MEDIA_STORAGE_DRIVER: ${MEDIA_STORAGE_DRIVER:-disk}
+      S3_ENDPOINT: http://minio:9000
+      S3_BUCKET: ${S3_BUCKET:-media}
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-media_admin}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-change-me-in-production}
+      LIVEKIT_URL: ws://livekit:7880
+      LIVEKIT_API_KEY: ${LIVEKIT_API_KEY}
+      LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo-init:
+        condition: service_completed_successfully
+    volumes:
+      - uploads_data:/app/uploads
+    restart: unless-stopped
+
+  # Next.js frontend (see ../frontend/Dockerfile). NEXT_PUBLIC_* vars are
+  # inlined into the client bundle at *build* time, so they're passed as
+  # build args here, not just runtime environment — changing one of them
+  # requires a rebuild (`docker compose up -d --build frontend`), not just a
+  # restart. NEXT_PUBLIC_API_URL should be the URL a real browser can reach
+  # this server at (e.g. your public domain), not the in-network `app`
+  # hostname the backend service itself uses.
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_LEGACY_MEDIA_ORIGINS: ${NEXT_PUBLIC_LEGACY_MEDIA_ORIGINS:-}
+        NEXT_PUBLIC_LEGACY_STORAGE_PREFIX: ${NEXT_PUBLIC_LEGACY_STORAGE_PREFIX:-}
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY:-}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:-}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID:-}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET:-}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:-}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID:-}
+        NEXT_PUBLIC_FIREBASE_VAPID_KEY: ${NEXT_PUBLIC_FIREBASE_VAPID_KEY:-}
+        NEXT_PUBLIC_SUPPORT_EMAIL: ${NEXT_PUBLIC_SUPPORT_EMAIL:-}
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - app
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    environment:
+      MONGO_INITDB_DATABASE: chat
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:27018:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # One-shot: initiates the single-node replica set exactly once. Idempotent — checks
+  # rs.status() first, so re-running `docker compose up` after the set already exists is a no-op.
+  mongo-init:
+    image: mongo:7
+    restart: "no"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    entrypoint:
+      - bash
+      - -c
+      - |
+        mongosh --host mongodb:27017 --eval '
+          try {
+            rs.status();
+            print("replica set already initiated");
+          } catch (e) {
+            rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "mongodb:27017" }] });
+            print("replica set initiated");
+          }
+        '
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # Self-hosted SFU for B8 calls (src/calls/) — same server as the app, per plan requirement.
+  # Auth is a key/secret pair generated locally (see livekit.yaml.example), not obtained from
+  # any external service.
+  livekit:
+    image: livekit/livekit-server:v1.8
+    restart: unless-stopped
+    command: ["--config", "/etc/livekit.yaml"]
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    ports:
+      - "7880:7880" # HTTP/WS signaling — matches LIVEKIT_URL
+      - "7881:7881" # TCP fallback for clients that can't do UDP
+      - "51000-51100:51000-51100/udp" # RTC media (must match rtc.port_range in livekit.yaml)
+
+  # Self-hosted TURN relay, used by ICE candidates when a direct/UDP path is blocked by
+  # NAT/firewall. Standard TURN ports; the relay range is kept disjoint from LiveKit's own RTC
+  # port range above. Uses a static long-term-credential user (not the ephemeral REST-API
+  # mechanism) so livekit.yaml's rtc.ice_servers can reference a fixed username/password.
+  coturn:
+    image: coturn/coturn:4.6
+    restart: unless-stopped
+    command:
+      - "-n"
+      - "--log-file=stdout"
+      - "--listening-port=3478"
+      - "--tls-listening-port=5349"
+      - "--realm=chat-app.local"
+      - "--lt-cred-mech"
+      - "--user=livekit:${TURN_SECRET}"
+      - "--min-port=49000"
+      - "--max-port=49100"
+      - "--no-cli"
+    ports:
+      - "3478:3478"
+      - "3478:3478/udp"
+      - "5349:5349"
+      - "5349:5349/udp"
+      - "49000-49100:49000-49100/udp"
+
+  # Self-hosted S3-compatible object store for MediaService (B9's media_assets uploads —
+  # images/videos/clips/stickers/wallpaper) when MEDIA_STORAGE_DRIVER=s3 (B11). Same server as
+  # the app, not a cloud account — matches the self-hosted-over-external preference already
+  # applied to B8's LiveKit/coturn. Host ports offset from MinIO's 9000/9001 defaults since the
+  # unrelated "finora-*" containers already occupy those on this machine.
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:-media_admin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:-change-me-in-production}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9010:9000" # S3 API — matches S3_ENDPOINT
+      - "9011:9001" # web console
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # One-shot: creates the media bucket exactly once. Idempotent — `mc mb --ignore-existing`, so
+  # re-running `docker compose up` after the bucket already exists is a no-op.
+  minio-init:
+    image: minio/mc:latest
+    restart: "no"
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-media_admin}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-change-me-in-production}
+      S3_BUCKET: ${S3_BUCKET:-media}
+    entrypoint:
+      - sh
+      - -c
+      - |
+        mc alias set local http://minio:9000 "$$S3_ACCESS_KEY_ID" "$$S3_SECRET_ACCESS_KEY" &&
+        mc mb --ignore-existing "local/$$S3_BUCKET"
+
+volumes:
+  mongodb_data:
+  redis_data:
+  uploads_data:
+  minio_data:

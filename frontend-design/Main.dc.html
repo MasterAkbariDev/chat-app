@@ -1,0 +1,280 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Sora:wght@600;700&display=swap">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Vazirmatn',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .disp{font-family:'Sora','Vazirmatn',sans-serif;}
+  a{color:{{t.a1}};}
+  a:hover{filter:brightness(1.15);}
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-thumb{background:{{t.border}};border-radius:99px;}
+  @keyframes riseIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+  @keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(16,185,129,.55)}70%{box-shadow:0 0 0 6px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+  .row{animation:riseIn 320ms cubic-bezier(.16,1,.3,1) both;}
+  .bub{animation:popIn 280ms cubic-bezier(.16,1,.3,1) both;}
+  .qa{opacity:0;transform:translateX(6px);transition:opacity 160ms ease,transform 160ms ease;}
+  .rowwrap:hover .qa{opacity:1;transform:translateX(0);}
+  .rowwrap:hover .rowmask{opacity:1;}
+  .pulse{animation:pulseRing 2.2s ease-out infinite;}
+  .pressable{transition:transform 140ms cubic-bezier(.34,1.56,.64,1);}
+  .pressable:active{transform:scale(.9);}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</helmet>
+
+<div style="width:1440px;height:900px;background:{{t.bg}};color:{{t.fg}};display:flex;overflow:hidden;border-radius:14px;position:relative">
+  <div class="grain"></div>
+
+  <!-- LEFT RAIL -->
+  <div style="width:340px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid {{t.border}};background:{{t.surface}}">
+
+    <div style="height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:linear-gradient(120deg,{{t.a1}}1a,{{t.a2}}0d)">
+      <div class="disp" style="font-size:18px;line-height:24px;font-weight:700;letter-spacing:-.01em">Chats</div>
+      <div style="display:flex;gap:4px">
+        <div style="width:38px;height:38px;border-radius:30%;display:flex;align-items:center;justify-content:center;color:{{t.muted}}">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg>
+        </div>
+        <div class="pressable" style="width:38px;height:38px;border-radius:30%;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 4px 14px {{t.a1}}55">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:relative;display:flex;padding:10px 16px;gap:2px">
+      <div style="position:absolute;top:10px;bottom:10px;left:16px;width:calc(25% - 2px);border-radius:999px;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});transition:transform 320ms cubic-bezier(.16,1,.3,1);transform:translateX({{folderPx}}%);z-index:0"></div>
+      <sc-for list="{{folders}}" as="f">
+        <div onClick="{{f.select}}" style="position:relative;z-index:1;flex:1;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;cursor:pointer;color:{{f.color}};transition:color 200ms ease">{{f.label}}</div>
+      </sc-for>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;padding:2px 0">
+      <sc-for list="{{rows}}" as="row" hint-placeholder-count="6">
+        <div class="rowwrap row" style="position:relative;animation-delay:{{row.delay}}ms">
+          <div class="rowmask" style="position:absolute;inset:0 0 0 auto;width:112px;display:flex;opacity:0;transition:opacity 160ms ease;z-index:0">
+            <div onClick="{{row.onPin}}" style="flex:1;background:{{t.a1}};display:flex;align-items:center;justify-content:center;color:#fff">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="#fff"><path d="M10 2a4 4 0 0 0-4 4c0 3 4 8 4 8s4-5 4-8a4 4 0 0 0-4-4z"/></svg>
+            </div>
+            <div onClick="{{row.onMute}}" style="flex:1;background:#64748b;display:flex;align-items:center;justify-content:center;color:#fff">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"><path d="M4 10a6 6 0 0 1 12 0v3M10 4v2"/><line x1="3" y1="3" x2="17" y2="17"/></svg>
+            </div>
+            <div onClick="{{row.onArchive}}" style="flex:1;background:#ef4444;display:flex;align-items:center;justify-content:center;color:#fff;border-top-right-radius:8px;border-bottom-right-radius:8px">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="3" rx="1"/><path d="M4 8h12l-1 8H5z"/></svg>
+            </div>
+          </div>
+          <div style="position:relative;z-index:1;display:flex;align-items:center;gap:12px;padding:12px 12px;background:{{row.bg}};border-right:{{row.railBorder}};cursor:pointer">
+            <div style="position:relative;width:48px;height:48px;flex-shrink:0">
+              <div style="width:48px;height:48px;border-radius:30%;background:{{row.avatarBg}};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:17px">{{row.initial}}</div>
+              <sc-if value="{{row.online}}" hint-placeholder-val="{{false}}">
+                <div class="pulse" style="position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:999px;background:#10b981;border:2px solid {{t.surface}}"></div>
+              </sc-if>
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;justify-content:space-between;align-items:baseline">
+                <div style="display:flex;align-items:center;gap:5px;min-width:0">
+                  <sc-if value="{{row.pinned}}" hint-placeholder-val="{{false}}">
+                    <svg width="11" height="11" viewBox="0 0 20 20" fill="{{t.a1}}" style="flex-shrink:0"><path d="M10 2a4 4 0 0 0-4 4c0 3 4 8 4 8s4-5 4-8a4 4 0 0 0-4-4z"/></svg>
+                  </sc-if>
+                  <div style="font-size:15px;font-weight:{{row.weight}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{row.title}}</div>
+                </div>
+                <div style="font-size:12px;color:{{t.muted}};flex-shrink:0">{{row.time}}</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
+                <div style="font-size:13px;color:{{t.muted}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{row.preview}}</div>
+                <sc-if value="{{row.hasBadge}}" hint-placeholder-val="{{false}}">
+                  <div style="width:19px;height:19px;border-radius:30%;background:{{row.badgeBg}};color:{{row.badgeColor}};border:{{row.badgeBorder}};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-inline-start:8px">{{row.badgeText}}</div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- READING PANE -->
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <div style="height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid {{t.border}};background:linear-gradient(120deg,{{t.a1}}14,transparent 60%),{{t.surface}}">
+      <div style="display:flex;align-items:center;gap:12px;min-width:0">
+        <div style="width:42px;height:42px;border-radius:30%;background:linear-gradient(135deg,#818cf8,#c084fc);flex-shrink:0"></div>
+        <div style="min-width:0">
+          <div class="disp" style="font-size:16px;font-weight:700;line-height:22px">The Family</div>
+          <div style="font-size:12px;color:{{t.muted}};line-height:16px">6 members · Mina, Reza online</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:4px;flex-shrink:0">
+        <div style="width:38px;height:38px;border-radius:30%;display:flex;align-items:center;justify-content:center;color:{{t.muted}}">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg>
+        </div>
+        <div style="width:38px;height:38px;border-radius:30%;display:flex;align-items:center;justify-content:center;color:{{t.muted}}">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4c0 6.6 5.4 12 12 12l2-3.4-4.4-2.2-1.8 1.8c-1.8-1-3.4-2.6-4.4-4.4l1.8-1.8L7 2 4 4z"/></svg>
+        </div>
+        <div style="width:38px;height:38px;border-radius:30%;display:flex;align-items:center;justify-content:center;color:{{t.muted}}">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><line x1="10" y1="9" x2="10" y2="14"/><circle cx="10" cy="6.4" r=".9" fill="currentColor" stroke="none"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 22px;border-bottom:1px solid {{t.border}};background:{{t.surface2}}">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="{{t.a1}}" style="flex-shrink:0"><path d="M10 2a4 4 0 0 0-4 4c0 3 4 8 4 8s4-5 4-8a4 4 0 0 0-4-4z"/></svg>
+      <div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1"><span style="font-weight:600">Dad:</span> Dinner's at 8 tonight, don't be late</div>
+      <div style="font-size:12px;color:{{t.muted}};flex-shrink:0">1 of 3</div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding:22px 26px;display:flex;flex-direction:column;gap:14px;background:{{t.bg}}">
+
+      <div class="bub" style="align-self:center;padding:4px 12px;border-radius:999px;background:{{t.surface2}};color:{{t.muted}};font-size:11px;font-weight:500">Today</div>
+      <div class="bub" style="align-self:center;padding:4px 12px;border-radius:999px;background:{{t.surface2}};color:{{t.muted}};font-size:12px">Mina joined the group</div>
+
+      <!-- other user run, connected by a spine instead of a repeated avatar -->
+      <div class="bub" style="display:flex;gap:10px;max-width:70%;align-self:flex-start">
+        <div style="width:26px;height:26px;border-radius:30%;background:linear-gradient(135deg,#818cf8,#c084fc);flex-shrink:0"></div>
+        <div style="position:relative;display:flex;flex-direction:column;gap:8px;padding-inline-start:12px">
+          <div style="position:absolute;left:0;top:2px;bottom:20px;width:2px;border-radius:2px;background:linear-gradient(180deg,{{t.a1}},transparent)"></div>
+          <div style="font-size:12px;font-weight:700;color:{{t.a1}}">Dad</div>
+          <div style="background:{{t.bubbleOther}};border:1px solid {{t.border}};border-radius:22px 22px 22px 6px;padding:10px 14px;font-size:15px;line-height:22px">Dinner's at 8 tonight, don't be late!</div>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px;width:220px;border-radius:16px;overflow:hidden">
+            <div style="background:linear-gradient(135deg,#fbbf24,#f97316);height:90px"></div>
+            <div style="background:linear-gradient(135deg,#34d399,#0ea5e9);height:90px"></div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <div style="height:22px;padding:0 9px;border-radius:999px;background:{{t.bubbleOther}};border:1px solid {{t.border}};display:flex;align-items:center;gap:4px;font-size:12px">👍 <span style="color:{{t.muted}}">3</span></div>
+            <div style="height:22px;padding:0 9px;border-radius:999px;background:{{t.bubbleOther}};border:1px solid {{t.border}};display:flex;align-items:center;gap:4px;font-size:12px">❤️ <span style="color:{{t.muted}}">1</span></div>
+          </div>
+          <div style="font-size:11px;color:{{t.muted}}">2:14 PM</div>
+        </div>
+      </div>
+
+      <!-- reply, own -->
+      <div class="bub" style="align-self:flex-end;max-width:70%;display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+        <div style="background:linear-gradient(135deg,{{t.a1}},{{t.a2}});color:#fff;border-radius:22px 6px 22px 22px;padding:10px 14px;box-shadow:0 6px 18px {{t.a1}}40">
+          <div style="border-inline-start:2px solid rgba(255,255,255,.65);padding-inline-start:8px;margin-bottom:6px;opacity:.9;font-size:13px;line-height:17px">
+            <div style="font-weight:700">Dad</div>
+            <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px">Dinner's at 8 tonight…</div>
+          </div>
+          <div style="font-size:15px;line-height:22px">Can I bring dessert? 🍰</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:{{t.muted}}">
+          2:16 PM
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="{{t.a1}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,10 6,14 12,6"/><polyline points="7,10 11,14 18,6"/></svg>
+        </div>
+      </div>
+
+      <!-- voice message -->
+      <div class="bub" style="display:flex;gap:10px;max-width:70%;align-self:flex-start">
+        <div style="width:26px;height:26px;border-radius:30%;background:linear-gradient(135deg,#f59e0b,#f97316);flex-shrink:0"></div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="background:{{t.bubbleOther}};border:1px solid {{t.border}};border-radius:22px 22px 22px 6px;padding:10px 14px;display:flex;align-items:center;gap:10px;width:220px">
+            <div style="width:32px;height:32px;border-radius:30%;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="#fff"><polygon points="6,4 16,10 6,16"/></svg>
+            </div>
+            <div style="flex:1;display:flex;align-items:center;gap:2px;height:24px">
+              <div style="width:2px;height:8px;background:{{t.border}};border-radius:1px"></div>
+              <div style="width:2px;height:16px;background:{{t.a1}};border-radius:1px"></div>
+              <div style="width:2px;height:10px;background:{{t.a1}};border-radius:1px"></div>
+              <div style="width:2px;height:20px;background:{{t.a1}};border-radius:1px"></div>
+              <div style="width:2px;height:6px;background:{{t.border}};border-radius:1px"></div>
+              <div style="width:2px;height:14px;background:{{t.border}};border-radius:1px"></div>
+            </div>
+            <div style="font-size:11px;color:{{t.muted}};flex-shrink:0">0:42</div>
+          </div>
+          <div style="font-size:11px;color:{{t.muted}}">2:19 PM</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="border-top:1px solid {{t.border}};background:{{t.surface}};padding:8px 12px;display:flex;align-items:flex-end;gap:8px">
+      <div style="width:38px;height:38px;border-radius:30%;display:flex;align-items:center;justify-content:center;color:{{t.muted}};flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 6.5l-6 6a2.6 2.6 0 0 0 3.7 3.7l6-6a4.2 4.2 0 0 0-6-6l-6 6a1.8 1.8 0 0 0 2.5 2.5"/></svg>
+      </div>
+      <div style="flex:1;min-height:38px;border-radius:20px;background:{{t.surface2}};display:flex;align-items:center;padding:0 14px;font-size:15px;color:{{t.muted}}">Message The Family…</div>
+      <div style="width:38px;height:38px;border-radius:30%;display:flex;align-items:center;justify-content:center;color:{{t.muted}};flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><circle cx="7.3" cy="8.5" r=".9" fill="currentColor" stroke="none"/><circle cx="12.7" cy="8.5" r=".9" fill="currentColor" stroke="none"/><path d="M6.5 12c1 1.3 2.4 2 3.5 2s2.5-.7 3.5-2"/></svg>
+      </div>
+      <div class="pressable" style="width:38px;height:38px;border-radius:30%;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:0 4px 14px {{t.a1}}55">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="7.5" y="3" width="5" height="9" rx="2.5"/><path d="M4 10a6 6 0 0 0 12 0"/><line x1="10" y1="16" x2="10" y2="18"/></svg>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"daybreak","options":["daybreak","aurora","meadow","midnightRose","mono"],"section":"Theme"}}'>
+const THEMES = {
+  daybreak:     { label:'Daybreak',      bg:'#fbf7f2', surface:'#ffffff', surface2:'#f4ede4', fg:'#241c15', muted:'#8a7b6c', border:'#ece1d3', a1:'#fb7185', a2:'#f59e0b', bubbleOther:'#ffffff' },
+  aurora:       { label:'Aurora',        bg:'#0f1220', surface:'#171a2b', surface2:'#1f2338', fg:'#eef0fb', muted:'#8b90b8', border:'#2a2f4a', a1:'#8b5cf6', a2:'#22d3ee', bubbleOther:'#1f2338' },
+  meadow:       { label:'Meadow',        bg:'#f2f8f4', surface:'#ffffff', surface2:'#e7f3ea', fg:'#132318', muted:'#6f8a78', border:'#dcebe0', a1:'#0d9488', a2:'#84cc16', bubbleOther:'#ffffff' },
+  midnightRose: { label:'Midnight Rose', bg:'#180f1c', surface:'#231729', surface2:'#2c1d34', fg:'#f6ecf7', muted:'#a389ac', border:'#392a42', a1:'#c026d3', a2:'#fb7185', bubbleOther:'#2c1d34' },
+  mono:         { label:'Mono',          bg:'#f4f3ef', surface:'#fffdf9', surface2:'#eae8e1', fg:'#18181b', muted:'#71717a', border:'#e0ded5', a1:'#27272a', a2:'#71717a', bubbleOther:'#fffdf9' },
+};
+const FOLDER_DEFS = ['All', 'Family', 'Groups', 'Channels'];
+
+class Component extends DCLogic {
+  renderVals() {
+    const t = THEMES[this.props.theme] ?? THEMES.daybreak;
+    const folderIdx = this.state.folderIdx ?? 0;
+    const setFolder = (i) => this.setState({ folderIdx: i });
+    const folders = FOLDER_DEFS.map((label, i) => ({
+      label,
+      select: () => setFolder(i),
+      color: i === folderIdx ? '#ffffff' : t.muted,
+    }));
+
+    const rowDefs = [
+      { id: 'family', initial: 'F', avatarBg: 'linear-gradient(135deg,#818cf8,#c084fc)', title: 'The Family', time: '2:14 PM', preview: "Dad: Dinner's at 8 tonight", pinned: true, online: false, weight: 700, badge: '3', selected: true },
+      { id: 'mina', initial: 'M', avatarBg: 'linear-gradient(135deg,#f59e0b,#f97316)', title: 'Mina', time: '1:47 PM', preview: 'Voice message', pinned: false, online: true, weight: 700, badge: '1' },
+      { id: 'trip', initial: 'W', avatarBg: 'linear-gradient(135deg,#10b981,#06b6d4)', title: 'Weekend Trip', time: '11:02 AM', preview: 'You: Sounds great, count me in!', pinned: false, online: false, weight: 500, badge: null },
+      { id: 'ann', initial: 'A', avatarBg: 'linear-gradient(135deg,#64748b,#334155)', title: 'Announcements', time: 'Yesterday', preview: 'Admin: New house rules posted', pinned: false, online: false, weight: 700, badge: '@' },
+      { id: 'reza', initial: 'R', avatarBg: 'linear-gradient(135deg,#f472b6,#fb7185)', title: 'Reza', time: 'Yesterday', preview: 'Photo', pinned: false, online: false, weight: 500, badge: null },
+      { id: 'grandma', initial: 'G', avatarBg: 'linear-gradient(135deg,#a3a3a3,#737373)', title: 'Grandma', time: 'now', preview: 'typing…', pinned: false, online: true, weight: 500, badge: null },
+    ];
+
+    const rows = rowDefs.map((r, i) => {
+      const hasBadge = !!r.badge;
+      const isMention = r.badge === '@';
+      return {
+        delay: i * 35,
+        onPin: (e) => e?.stopPropagation?.(),
+        onMute: (e) => e?.stopPropagation?.(),
+        onArchive: (e) => e?.stopPropagation?.(),
+        bg: r.selected ? t.surface2 : 'transparent',
+        railBorder: r.selected ? `2px solid ${t.a1}` : '2px solid transparent',
+        avatarBg: r.avatarBg,
+        initial: r.initial,
+        online: r.online,
+        pinned: r.pinned,
+        title: r.title,
+        time: r.time,
+        preview: r.preview,
+        weight: r.weight,
+        hasBadge,
+        badgeText: r.badge,
+        badgeBg: isMention ? 'transparent' : t.a1,
+        badgeColor: isMention ? t.a1 : '#ffffff',
+        badgeBorder: isMention ? `1px solid ${t.a1}` : '1px solid transparent',
+      };
+    });
+
+    return {
+      t,
+      folders,
+      folderPx: folderIdx * 100,
+      rows,
+    };
+  }
+}
+</script>
+</body>
+</html>

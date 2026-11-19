@@ -1,0 +1,43 @@
+name: Admin panel CI
+
+# Checks the internal admin panel on every push and PR. It does not deploy anything; the
+# deploy job in ci-cd.yml covers the other apps and is untouched.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  admin-panel:
+    name: Admin panel (types, lint, tests, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: admin-panel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun run lint
+      - run: bun run test
+      - name: Build
+        run: bun run build
+        env:
+          ADMIN_API_BASE: http://localhost:3097
+
+  secrets-scan:
+    name: Secrets scan (gitleaks)
+    permissions:
+      contents: read
+      pull-requests: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

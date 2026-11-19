@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Sora:wght@600;700&display=swap">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Vazirmatn',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .disp{font-family:'Sora','Vazirmatn',sans-serif;}
+  @keyframes riseIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .row{animation:riseIn 260ms cubic-bezier(.16,1,.3,1) both;}
+  .pressable{transition:transform 140ms cubic-bezier(.34,1.56,.64,1);}
+  .pressable:active{transform:scale(.97);}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</helmet>
+
+<div style="width:430px;height:700px;background:{{t.surface}};color:{{t.fg}};border-radius:24px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.16);position:relative">
+  <div class="grain"></div>
+
+  <div style="flex-shrink:0;padding:16px 20px 0;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="disp" style="font-size:17px;font-weight:700">New conversation</div>
+      <div style="width:32px;height:32px;border-radius:30%;background:{{t.surface2}};display:flex;align-items:center;justify-content:center;color:{{t.muted}}">
+        <svg width="15" height="15" viewBox="0 0 20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg>
+      </div>
+    </div>
+
+    <div style="position:relative;display:flex;background:{{t.surface2}};border-radius:14px;padding:3px;gap:2px">
+      <div style="position:absolute;top:3px;bottom:3px;left:3px;width:calc(25% - 3px);border-radius:11px;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});transition:transform 300ms cubic-bezier(.16,1,.3,1);transform:translateX({{tabPx}}%)"></div>
+      <sc-for list="{{tabs}}" as="tab">
+        <div onClick="{{tab.select}}" style="position:relative;flex:1;padding:8px 4px;font-size:13px;font-weight:600;color:{{tab.color}};cursor:pointer;text-align:center">{{tab.label}}</div>
+      </sc-for>
+    </div>
+
+    <div style="height:40px;border-radius:14px;background:{{t.surface2}};display:flex;align-items:center;gap:8px;padding:0 14px;color:{{t.muted}}">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg>
+      <span style="font-size:14px">{{searchPlaceholder}}</span>
+    </div>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:12px 20px;display:flex;flex-direction:column;gap:4px">
+
+    <sc-if value="{{isGroupLike}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:500">{{nameFieldLabel}}</div>
+        <div style="height:44px;border-radius:14px;border:1px solid {{t.border}};display:flex;align-items:center;padding:0 12px;font-size:15px;color:{{t.muted}}">{{namePlaceholder}}</div>
+      </div>
+    </sc-if>
+
+    <div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:{{t.muted}};padding:8px 4px 4px">{{listLabel}}</div>
+
+    <sc-for list="{{people}}" as="p" hint-placeholder-count="3">
+      <div class="row" style="display:flex;align-items:center;gap:12px;padding:9px 4px;animation-delay:{{p.delay}}ms">
+        <div style="width:42px;height:42px;border-radius:30%;background:{{p.avatarBg}};flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600">{{p.initial}}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{p.name}}</div>
+          <div style="font-size:12px;color:{{t.muted}}">{{p.meta}}</div>
+        </div>
+        <sc-if value="{{isGroupLike}}" hint-placeholder-val="{{false}}">
+          <div style="width:22px;height:22px;border-radius:30%;background:{{p.checkBg}};border:2px solid {{p.checkBorder}}"></div>
+        </sc-if>
+      </div>
+    </sc-for>
+
+  </div>
+
+  <div style="flex-shrink:0;padding:14px 20px calc(env(safe-area-inset-bottom,0px) + 14px);border-top:1px solid {{t.border}}">
+    <div class="pressable" style="height:46px;border-radius:14px;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;box-shadow:0 8px 20px {{t.a1}}40">{{ctaLabel}}</div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"daybreak","options":["daybreak","aurora","meadow","midnightRose","mono"],"section":"Theme"}}'>
+const THEMES = {
+  daybreak:     { bg:'#fbf7f2', surface:'#ffffff', surface2:'#f4ede4', fg:'#241c15', muted:'#8a7b6c', border:'#ece1d3', a1:'#fb7185', a2:'#f59e0b' },
+  aurora:       { bg:'#0f1220', surface:'#171a2b', surface2:'#1f2338', fg:'#eef0fb', muted:'#8b90b8', border:'#2a2f4a', a1:'#8b5cf6', a2:'#22d3ee' },
+  meadow:       { bg:'#f2f8f4', surface:'#ffffff', surface2:'#e7f3ea', fg:'#132318', muted:'#6f8a78', border:'#dcebe0', a1:'#0d9488', a2:'#84cc16' },
+  midnightRose: { bg:'#180f1c', surface:'#231729', surface2:'#2c1d34', fg:'#f6ecf7', muted:'#a389ac', border:'#392a42', a1:'#c026d3', a2:'#fb7185' },
+  mono:         { bg:'#f4f3ef', surface:'#fffdf9', surface2:'#eae8e1', fg:'#18181b', muted:'#71717a', border:'#e0ded5', a1:'#27272a', a2:'#71717a' },
+};
+
+class Component extends DCLogic {
+  renderVals() {
+    const t = THEMES[this.props.theme] ?? THEMES.daybreak;
+    const active = this.state.tab ?? 'direct';
+    const setTab = (tb) => this.setState({ tab: tb });
+    const tabDefs = [
+      { key: 'direct', label: 'Direct' },
+      { key: 'group', label: 'Group' },
+      { key: 'channel', label: 'Channel' },
+      { key: 'discover', label: 'Discover' },
+    ];
+    const idx = tabDefs.findIndex((tb) => tb.key === active);
+    const tabs = tabDefs.map((tb) => ({
+      label: tb.label,
+      select: () => setTab(tb.key),
+      color: active === tb.key ? '#ffffff' : t.muted,
+    }));
+    const isGroupLike = active === 'group' || active === 'channel';
+    const copy = {
+      direct: { search: 'Search people', list: 'Suggested', cta: 'Start conversation' },
+      group: { search: 'Add members', list: 'Members', cta: 'Create group' },
+      channel: { search: 'Add members', list: 'Members', cta: 'Create channel' },
+      discover: { search: 'Search public channels', list: 'Popular channels', cta: 'Join channel' },
+    }[active];
+
+    const peopleDefs = [
+      { initial: 'M', avatarBg: 'linear-gradient(135deg,#f59e0b,#f97316)', name: 'Mina Rostami', meta: '@mina · online', checked: true },
+      { initial: 'R', avatarBg: 'linear-gradient(135deg,#f472b6,#fb7185)', name: 'Reza Karimi', meta: '@reza · last seen 3h ago', checked: false },
+      { initial: 'G', avatarBg: 'linear-gradient(135deg,#a3a3a3,#737373)', name: 'Grandma', meta: '@grandma · online', checked: false },
+    ];
+    const people = peopleDefs.map((p, i) => ({
+      delay: i * 40,
+      avatarBg: p.avatarBg,
+      initial: p.initial,
+      name: p.name,
+      meta: p.meta,
+      checkBg: p.checked ? t.a1 : 'transparent',
+      checkBorder: p.checked ? t.a1 : t.border,
+    }));
+
+    return {
+      t,
+      tabs,
+      tabPx: idx * 100,
+      isGroupLike,
+      searchPlaceholder: copy.search,
+      listLabel: copy.list,
+      ctaLabel: copy.cta,
+      nameFieldLabel: active === 'channel' ? 'Channel name & @handle' : 'Group name',
+      namePlaceholder: active === 'channel' ? 'e.g. Announcements · @announcements' : 'e.g. Weekend Trip',
+      people,
+    };
+  }
+}
+</script>
+</body>
+</html>

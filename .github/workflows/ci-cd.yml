@@ -1,0 +1,88 @@
+name: Project checks
+
+# Validate changes on main and pull requests. Deployment is a separate manual step.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-ci:
+    name: Backend (test + typecheck + lint)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bunx eslint "src/**/*.ts"
+      - run: bun run test
+      - run: bun run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backend-build
+          path: backend/dist/
+          if-no-files-found: error
+          retention-days: 3
+
+  frontend-ci:
+    name: Frontend (test + typecheck + lint + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx next typegen
+      - run: bunx tsc --noEmit
+      - run: bunx eslint .
+      - run: bun run test
+      - run: bun run build
+
+  local-setup-smoke:
+    name: Local Docker setup smoke test
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exercise installer
+        run: printf '\n\n\n' | script -q -e -c "bash install.sh" /dev/null
+        env:
+          CHAT_REPO_URL: ${{ github.workspace }}
+          CHAT_INSTALL_DIR: ${{ runner.temp }}/chat-install
+      - name: Wait for API and web
+        run: |
+          for url in http://localhost:3001/docs http://localhost:3000; do
+            ready=0
+            for attempt in $(seq 1 30); do
+              if curl --fail --silent --output /dev/null "$url"; then ready=1; break; fi
+              sleep 2
+            done
+            [ "$ready" = 1 ] || { docker compose -f ${{ runner.temp }}/chat-install/backend/docker-compose.yml logs app frontend; exit 1; }
+          done
+      - name: Capture login screen
+        run: |
+          npx --yes playwright@1.63.0 install --with-deps chromium
+          npx --yes playwright@1.63.0 screenshot --browser chromium --viewport-size="1440,900" --wait-for-timeout=1500 http://localhost:3000/login chat-login.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chat-login-screenshot
+          path: chat-login.png
+          retention-days: 7
+      - name: Stop containers
+        if: always()
+        run: docker compose -f ${{ runner.temp }}/chat-install/backend/docker-compose.yml down
+

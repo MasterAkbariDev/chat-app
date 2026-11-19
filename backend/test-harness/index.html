@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>backend test harness</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<style>
+  body { font-family: monospace; max-width: 900px; margin: 20px auto; }
+  fieldset { margin-bottom: 12px; }
+  input { width: 220px; }
+  button { margin: 2px; }
+  pre { background: #f0f0f0; padding: 8px; max-height: 200px; overflow: auto; white-space: pre-wrap; }
+  .row > * { margin-right: 6px; }
+</style>
+</head>
+<body>
+<h2>chat-backend — manual test harness (no real UI, just buttons)</h2>
+
+<fieldset>
+  <legend>API base</legend>
+  <input id="apiBase" value="http://localhost:3001">
+</fieldset>
+
+<fieldset>
+  <legend>Auth</legend>
+  <div class="row">
+    <input id="email" placeholder="email" value="tester1@example.com">
+    <input id="username" placeholder="username" value="tester1">
+    <input id="password" placeholder="password" value="secret123">
+  </div>
+  <div class="row">
+    <button onclick="register()">Register</button>
+    <button onclick="login()">Login</button>
+    <button onclick="refresh()">Refresh token</button>
+    <button onclick="me()">GET /v1/auth/me</button>
+    <button onclick="sessions()">GET /v1/auth/sessions</button>
+  </div>
+  <div>access_token: <span id="accessToken">(none)</span></div>
+  <div>refresh_token: <span id="refreshToken">(none)</span></div>
+</fieldset>
+
+<fieldset>
+  <legend>Chats</legend>
+  <div class="row">
+    <input id="chatName" placeholder="channel name" value="Test Channel">
+    <button onclick="createChat()">Create chat (group)</button>
+    <button onclick="listMine()">GET /v1/channels/mine</button>
+  </div>
+  <div>current channelId: <span id="channelId">(none)</span></div>
+</fieldset>
+
+<fieldset>
+  <legend>Messages</legend>
+  <div class="row">
+    <input id="msgText" placeholder="message text" value="hello from harness">
+    <button onclick="sendMessageRest()">Send via REST</button>
+    <button onclick="sendMessageWs()">Send via WS</button>
+  </div>
+  <div>current messageId: <span id="messageId">(none)</span></div>
+</fieldset>
+
+<fieldset>
+  <legend>Reactions &amp; Read receipts (B5)</legend>
+  <div class="row">
+    <input id="reactionEmoji" placeholder="emoji" value="&#128077;" style="width:60px">
+    <button onclick="toggleReaction()">Toggle reaction on last message</button>
+  </div>
+  <div class="row">
+    <button onclick="markRead()">Mark last message as read</button>
+    <button onclick="getReads()">GET /v1/messages/:id/reads</button>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>WebSocket</legend>
+  <div class="row">
+    <button onclick="connectWs()">Connect</button>
+    <button onclick="disconnectWs()">Disconnect</button>
+    <span id="wsStatus">disconnected</span>
+  </div>
+</fieldset>
+
+<h3>Log</h3>
+<pre id="log"></pre>
+
+<script>
+let accessToken = null, refreshToken = null, channelId = null, socket = null, messageId = null;
+
+function setMessageId(id) {
+  if (!id) return;
+  messageId = id;
+  document.getElementById('messageId').textContent = messageId;
+}
+
+function log(label, data) {
+  const el = document.getElementById('log');
+  el.textContent = `--- ${label} ---\n${JSON.stringify(data, null, 2)}\n\n` + el.textContent;
+}
+
+function base() { return document.getElementById('apiBase').value.replace(/\/$/, ''); }
+
+async function api(method, path, body, useAuth = true) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (useAuth && accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
+  const res = await fetch(base() + path, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  let data;
+  try { data = await res.json(); } catch { data = { status: res.status }; }
+  log(`${method} ${path} -> ${res.status}`, data);
+  return data;
+}
+
+function setTokens(data) {
+  if (data.access_token) {
+    accessToken = data.access_token;
+    document.getElementById('accessToken').textContent = accessToken.slice(0, 24) + '...';
+  }
+  if (data.refresh_token) {
+    refreshToken = data.refresh_token;
+    document.getElementById('refreshToken').textContent = refreshToken.slice(0, 24) + '...';
+  }
+}
+
+async function register() {
+  const data = await api('POST', '/auth/register', {
+    email: document.getElementById('email').value,
+    username: document.getElementById('username').value,
+    password: document.getElementById('password').value,
+  }, false);
+  setTokens(data);
+}
+
+async function login() {
+  const data = await api('POST', '/auth/login', {
+    email: document.getElementById('email').value,
+    password: document.getElementById('password').value,
+  }, false);
+  setTokens(data);
+}
+
+async function refresh() {
+  const data = await api('POST', '/auth/refresh', { refresh_token: refreshToken }, false);
+  setTokens(data);
+}
+
+async function me() { await api('GET', '/v1/auth/me'); }
+async function sessions() { await api('GET', '/v1/auth/sessions'); }
+
+async function createChat() {
+  const data = await api('POST', '/chats/create', {
+    link: 'harness-' + Date.now(),
+    name: document.getElementById('chatName').value,
+    type: 'group',
+  });
+  if (data._id) {
+    channelId = data._id;
+    document.getElementById('channelId').textContent = channelId;
+  }
+}
+
+async function listMine() { await api('GET', '/v1/channels/mine'); }
+
+async function sendMessageRest() {
+  const data = await api('POST', '/messages', {
+    channelId,
+    content: document.getElementById('msgText').value,
+  });
+  setMessageId(data._id);
+}
+
+function sendMessageWs() {
+  if (!socket) return log('ws', { error: 'not connected' });
+  socket.emit('send_message', {
+    channelId,
+    content: document.getElementById('msgText').value,
+  }, (ack) => {
+    log('ws send_message ack', ack);
+    if (ack && ack.message && ack.message._id) setMessageId(ack.message._id);
+  });
+}
+
+async function toggleReaction() {
+  if (!messageId) return log('reaction', { error: 'no messageId yet' });
+  await api('POST', `/messages/${messageId}/reaction`, {
+    emoji: document.getElementById('reactionEmoji').value,
+  });
+}
+
+async function markRead() {
+  if (!messageId) return log('read', { error: 'no messageId yet' });
+  await api('POST', `/messages/channel/${channelId}/read`, {
+    lastReadMessageId: messageId,
+  });
+}
+
+async function getReads() {
+  if (!messageId) return log('reads', { error: 'no messageId yet' });
+  await api('GET', `/v1/messages/${messageId}/reads`);
+}
+
+function connectWs() {
+  socket = io(base(), { auth: { token: accessToken }, extraHeaders: { Authorization: `Bearer ${accessToken}` } });
+  socket.on('connect', () => { document.getElementById('wsStatus').textContent = 'connected: ' + socket.id; });
+  socket.on('disconnect', () => { document.getElementById('wsStatus').textContent = 'disconnected'; });
+  socket.on('new_message', (payload) => log('ws new_message', payload));
+  socket.on('user_status_changed', (payload) => log('ws user_status_changed', payload));
+  socket.onAny((event, ...args) => log(`ws:${event}`, args));
+}
+
+function disconnectWs() {
+  if (socket) socket.disconnect();
+}
+</script>
+</body>
+</html>

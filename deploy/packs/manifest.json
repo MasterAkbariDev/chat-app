@@ -1,0 +1,812 @@
+{
+ "notes": "Pack contents for the live server. Animated items: Google Noto Animated Emoji (CC BY 4.0, https://googlefonts.github.io/noto-emoji-animation/). Fluent 3D: Microsoft Fluent Emoji (MIT, https://github.com/microsoft/fluentui-emoji). Files are fetched by fetch-packs.mjs and not stored in git.",
+ "packs": [
+  {
+   "slug": "animated-smileys",
+   "name": "Animated Smileys",
+   "type": "emoji",
+   "source": "noto",
+   "description": "Animated faces for every mood. Google Noto Animated Emoji, CC BY 4.0.",
+   "tags": [
+    "faces",
+    "smileys",
+    "animated",
+    "emoji"
+   ],
+   "items": [
+    [
+     "1f600",
+     "grinning happy smile"
+    ],
+    [
+     "1f603",
+     "smiley happy"
+    ],
+    [
+     "1f604",
+     "smile happy"
+    ],
+    [
+     "1f601",
+     "grin beaming"
+    ],
+    [
+     "1f606",
+     "laughing"
+    ],
+    [
+     "1f605",
+     "sweat smile nervous"
+    ],
+    [
+     "1f923",
+     "rofl rolling laughing"
+    ],
+    [
+     "1f602",
+     "joy tears laughing lol"
+    ],
+    [
+     "1f642",
+     "slight smile"
+    ],
+    [
+     "1f643",
+     "upside down silly"
+    ],
+    [
+     "1f609",
+     "wink"
+    ],
+    [
+     "1f60a",
+     "blush happy"
+    ],
+    [
+     "1f607",
+     "innocent angel halo"
+    ],
+    [
+     "1f970",
+     "smiling hearts love"
+    ],
+    [
+     "1f60d",
+     "heart eyes love"
+    ],
+    [
+     "1f929",
+     "star struck wow"
+    ],
+    [
+     "1f618",
+     "kiss blow"
+    ],
+    [
+     "1f60b",
+     "yum tasty"
+    ],
+    [
+     "1f61b",
+     "tongue"
+    ],
+    [
+     "1f61c",
+     "winking tongue"
+    ],
+    [
+     "1f92a",
+     "zany crazy"
+    ],
+    [
+     "1f917",
+     "hug hugging"
+    ],
+    [
+     "1f92d",
+     "oops hand over mouth giggle"
+    ],
+    [
+     "1f92b",
+     "shush quiet"
+    ],
+    [
+     "1f914",
+     "thinking hmm"
+    ],
+    [
+     "1f610",
+     "neutral meh"
+    ],
+    [
+     "1f644",
+     "eye roll"
+    ],
+    [
+     "1f60f",
+     "smirk"
+    ],
+    [
+     "1f62c",
+     "grimace awkward"
+    ],
+    [
+     "1f60c",
+     "relieved"
+    ],
+    [
+     "1f634",
+     "sleeping tired zzz"
+    ],
+    [
+     "1f637",
+     "mask sick"
+    ],
+    [
+     "1f912",
+     "thermometer ill"
+    ],
+    [
+     "1f922",
+     "nauseated gross"
+    ],
+    [
+     "1f975",
+     "hot sweating"
+    ],
+    [
+     "1f976",
+     "cold freezing"
+    ],
+    [
+     "1f635",
+     "dizzy"
+    ],
+    [
+     "1f92f",
+     "mind blown exploding"
+    ],
+    [
+     "1f973",
+     "party partying celebrate"
+    ],
+    [
+     "1f60e",
+     "cool sunglasses"
+    ],
+    [
+     "1f913",
+     "nerd"
+    ],
+    [
+     "1f615",
+     "confused"
+    ],
+    [
+     "1f61f",
+     "worried"
+    ],
+    [
+     "1f62e",
+     "open mouth surprised"
+    ],
+    [
+     "1f633",
+     "flushed embarrassed"
+    ],
+    [
+     "1f97a",
+     "pleading puppy eyes please"
+    ],
+    [
+     "1f622",
+     "cry sad"
+    ],
+    [
+     "1f62d",
+     "sob crying"
+    ],
+    [
+     "1f631",
+     "scream shocked"
+    ],
+    [
+     "1f624",
+     "triumph huff"
+    ],
+    [
+     "1f621",
+     "rage angry"
+    ],
+    [
+     "1f620",
+     "angry mad"
+    ],
+    [
+     "1f92c",
+     "cursing swearing"
+    ],
+    [
+     "1f608",
+     "imp devil smiling"
+    ],
+    [
+     "1f480",
+     "skull dead"
+    ],
+    [
+     "1f4a9",
+     "poop"
+    ],
+    [
+     "1f921",
+     "clown"
+    ],
+    [
+     "1f47b",
+     "ghost boo"
+    ],
+    [
+     "1f47d",
+     "alien"
+    ],
+    [
+     "1f916",
+     "robot"
+    ]
+   ]
+  },
+  {
+   "slug": "animated-hearts-hands",
+   "name": "Animated Hearts & Hands",
+   "type": "emoji",
+   "source": "noto",
+   "description": "Hearts, gestures and reactions, animated. Google Noto Animated Emoji, CC BY 4.0.",
+   "tags": [
+    "hearts",
+    "hands",
+    "love",
+    "animated",
+    "emoji"
+   ],
+   "items": [
+    [
+     "2764_fe0f",
+     "red heart love"
+    ],
+    [
+     "1f9e1",
+     "orange heart"
+    ],
+    [
+     "1f49b",
+     "yellow heart"
+    ],
+    [
+     "1f49a",
+     "green heart"
+    ],
+    [
+     "1f499",
+     "blue heart"
+    ],
+    [
+     "1f49c",
+     "purple heart"
+    ],
+    [
+     "1f5a4",
+     "black heart"
+    ],
+    [
+     "1f90d",
+     "white heart"
+    ],
+    [
+     "1f494",
+     "broken heart"
+    ],
+    [
+     "2763_fe0f",
+     "heart exclamation"
+    ],
+    [
+     "1f495",
+     "two hearts"
+    ],
+    [
+     "1f49e",
+     "revolving hearts"
+    ],
+    [
+     "1f493",
+     "beating heart"
+    ],
+    [
+     "1f497",
+     "growing heart"
+    ],
+    [
+     "1f496",
+     "sparkling heart"
+    ],
+    [
+     "1f498",
+     "cupid arrow heart"
+    ],
+    [
+     "1f49d",
+     "heart gift ribbon"
+    ],
+    [
+     "1f48b",
+     "kiss mark lips"
+    ],
+    [
+     "1f44d",
+     "thumbs up like yes"
+    ],
+    [
+     "1f44e",
+     "thumbs down no"
+    ],
+    [
+     "1f44f",
+     "clap applause"
+    ],
+    [
+     "1f64c",
+     "raised hands hooray"
+    ],
+    [
+     "1f64f",
+     "pray please thanks"
+    ],
+    [
+     "1f44b",
+     "wave hello bye"
+    ],
+    [
+     "1f91d",
+     "handshake deal"
+    ],
+    [
+     "270c_fe0f",
+     "victory peace"
+    ],
+    [
+     "1f91e",
+     "fingers crossed luck"
+    ],
+    [
+     "1f918",
+     "rock on"
+    ],
+    [
+     "1f44c",
+     "ok perfect"
+    ],
+    [
+     "1f4aa",
+     "muscle strong"
+    ],
+    [
+     "1f449",
+     "point right"
+    ],
+    [
+     "1f446",
+     "point up"
+    ],
+    [
+     "1f44a",
+     "fist bump"
+    ],
+    [
+     "1f590_fe0f",
+     "raised hand high five"
+    ]
+   ]
+  },
+  {
+   "slug": "animated-party-nature",
+   "name": "Animated Party & Nature",
+   "type": "emoji",
+   "source": "noto",
+   "description": "Celebrations, weather, animals and food, animated. Google Noto Animated Emoji, CC BY 4.0.",
+   "tags": [
+    "party",
+    "nature",
+    "animals",
+    "food",
+    "animated",
+    "emoji"
+   ],
+   "items": [
+    [
+     "1f389",
+     "tada party celebrate"
+    ],
+    [
+     "1f38a",
+     "confetti ball"
+    ],
+    [
+     "1f388",
+     "balloon"
+    ],
+    [
+     "1f382",
+     "birthday cake"
+    ],
+    [
+     "1f381",
+     "gift present"
+    ],
+    [
+     "1f386",
+     "fireworks"
+    ],
+    [
+     "2728",
+     "sparkles"
+    ],
+    [
+     "1f525",
+     "fire lit hot"
+    ],
+    [
+     "1f4af",
+     "hundred 100 perfect"
+    ],
+    [
+     "2b50",
+     "star"
+    ],
+    [
+     "1f31f",
+     "glowing star"
+    ],
+    [
+     "1f308",
+     "rainbow"
+    ],
+    [
+     "26a1",
+     "zap lightning"
+    ],
+    [
+     "2744_fe0f",
+     "snowflake winter"
+    ],
+    [
+     "1f30a",
+     "ocean wave"
+    ],
+    [
+     "1f337",
+     "tulip flower"
+    ],
+    [
+     "1f339",
+     "rose flower"
+    ],
+    [
+     "1f340",
+     "four leaf clover luck"
+    ],
+    [
+     "1f98b",
+     "butterfly"
+    ],
+    [
+     "1f431",
+     "cat"
+    ],
+    [
+     "1f984",
+     "unicorn"
+    ],
+    [
+     "1f40c",
+     "snail slow"
+    ],
+    [
+     "1f427",
+     "penguin"
+    ],
+    [
+     "1f680",
+     "rocket launch"
+    ],
+    [
+     "1f514",
+     "bell"
+    ],
+    [
+     "2615",
+     "coffee hot drink"
+    ],
+    [
+     "1f37f",
+     "popcorn"
+    ],
+    [
+     "1f355",
+     "pizza"
+    ],
+    [
+     "1f37e",
+     "champagne"
+    ],
+    [
+     "1f3c6",
+     "trophy winner"
+    ],
+    [
+     "1f4a5",
+     "boom collision"
+    ],
+    [
+     "1f4a1",
+     "idea light bulb"
+    ],
+    [
+     "23f0",
+     "alarm clock"
+    ],
+    [
+     "1f440",
+     "eyes looking"
+    ]
+   ]
+  },
+  {
+   "slug": "big-feelings",
+   "name": "Big Feelings",
+   "type": "sticker",
+   "source": "noto",
+   "description": "Large animated stickers. Google Noto Animated Emoji, CC BY 4.0.",
+   "tags": [
+    "stickers",
+    "animated",
+    "faces",
+    "reactions"
+   ],
+   "items": [
+    [
+     "1f602",
+     "joy laughing lol"
+    ],
+    [
+     "1f62d",
+     "sob crying"
+    ],
+    [
+     "1f60d",
+     "heart eyes love"
+    ],
+    [
+     "1f970",
+     "smiling hearts love"
+    ],
+    [
+     "1f929",
+     "star struck wow"
+    ],
+    [
+     "1f973",
+     "party celebrate"
+    ],
+    [
+     "1f60e",
+     "cool"
+    ],
+    [
+     "1f914",
+     "thinking hmm"
+    ],
+    [
+     "1f644",
+     "eye roll"
+    ],
+    [
+     "1f631",
+     "scream shocked"
+    ],
+    [
+     "1f621",
+     "rage angry"
+    ],
+    [
+     "1f97a",
+     "pleading please"
+    ],
+    [
+     "1f917",
+     "hug"
+    ],
+    [
+     "1f634",
+     "sleeping tired"
+    ],
+    [
+     "1f92f",
+     "mind blown"
+    ],
+    [
+     "1f480",
+     "skull dead"
+    ],
+    [
+     "1f44d",
+     "thumbs up"
+    ],
+    [
+     "1f44f",
+     "clap"
+    ],
+    [
+     "1f64f",
+     "pray thanks"
+    ],
+    [
+     "1f389",
+     "tada party"
+    ],
+    [
+     "1f525",
+     "fire"
+    ],
+    [
+     "2764_fe0f",
+     "red heart"
+    ],
+    [
+     "1f4af",
+     "hundred"
+    ],
+    [
+     "1f47b",
+     "ghost"
+    ]
+   ]
+  },
+  {
+   "slug": "fluent-3d",
+   "name": "Fluent 3D",
+   "type": "sticker",
+   "source": "fluent",
+   "description": "Glossy 3D stickers. Microsoft Fluent Emoji, MIT.",
+   "tags": [
+    "stickers",
+    "3d",
+    "animals",
+    "food",
+    "objects"
+   ],
+   "items": [
+    [
+     "Cat face",
+     "cat"
+    ],
+    [
+     "Dog face",
+     "dog"
+    ],
+    [
+     "Fox",
+     "fox"
+    ],
+    [
+     "Panda",
+     "panda"
+    ],
+    [
+     "Unicorn",
+     "unicorn"
+    ],
+    [
+     "Teddy bear",
+     "teddy bear"
+    ],
+    [
+     "Penguin",
+     "penguin"
+    ],
+    [
+     "Hot beverage",
+     "coffee tea"
+    ],
+    [
+     "Pizza",
+     "pizza"
+    ],
+    [
+     "Doughnut",
+     "donut doughnut"
+    ],
+    [
+     "Birthday cake",
+     "birthday cake"
+    ],
+    [
+     "Party popper",
+     "party tada"
+    ],
+    [
+     "Wrapped gift",
+     "gift present"
+    ],
+    [
+     "Rocket",
+     "rocket"
+    ],
+    [
+     "Crown",
+     "crown king queen"
+    ],
+    [
+     "Gem stone",
+     "gem diamond"
+    ],
+    [
+     "Light bulb",
+     "idea bulb"
+    ],
+    [
+     "Money bag",
+     "money"
+    ],
+    [
+     "Trophy",
+     "trophy winner"
+    ],
+    [
+     "Red heart",
+     "heart love"
+    ],
+    [
+     "Sparkles",
+     "sparkles"
+    ],
+    [
+     "Fire",
+     "fire"
+    ],
+    [
+     "Star",
+     "star"
+    ],
+    [
+     "Rainbow",
+     "rainbow"
+    ],
+    [
+     "Sun with face",
+     "sun"
+    ],
+    [
+     "Cloud with rain",
+     "rain cloud"
+    ],
+    [
+     "Ghost",
+     "ghost"
+    ],
+    [
+     "Alien",
+     "alien"
+    ],
+    [
+     "Robot",
+     "robot"
+    ],
+    [
+     "Clown face",
+     "clown"
+    ]
+   ]
+  }
+ ]
+}

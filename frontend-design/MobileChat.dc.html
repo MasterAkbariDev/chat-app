@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Sora:wght@600;700&display=swap">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Vazirmatn',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  .disp{font-family:'Sora','Vazirmatn',sans-serif;}
+  @keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  .bub{animation:popIn 280ms cubic-bezier(.16,1,.3,1) both;}
+  .replybar{animation:slideDown 200ms cubic-bezier(.16,1,.3,1) both;}
+  .pressable{transition:transform 140ms cubic-bezier(.34,1.56,.64,1);}
+  .pressable:active{transform:scale(.9);}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  @keyframes waveGrow{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+  .wavebar{animation:waveGrow 900ms ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</helmet>
+
+<div style="width:390px;height:844px;background:{{t.bg}};color:{{t.fg}};display:flex;flex-direction:column;overflow:hidden;position:relative">
+  <div class="grain"></div>
+
+  <div style="flex-shrink:0;height:58px;display:flex;align-items:center;gap:10px;padding:0 12px;border-bottom:1px solid {{t.border}};background:linear-gradient(160deg,{{t.a1}}1f,transparent 70%),{{t.surface}}">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="{{t.fg}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="12,4 6,10 12,16"/></svg>
+    <div style="width:36px;height:36px;border-radius:30%;background:linear-gradient(135deg,#818cf8,#c084fc);flex-shrink:0"></div>
+    <div style="flex:1;min-width:0">
+      <div class="disp" style="font-size:15px;font-weight:700;line-height:20px">The Family</div>
+      <div style="font-size:12px;color:{{t.muted}};line-height:16px">6 members · 2 online</div>
+    </div>
+    <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="{{t.muted}}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M4 4c0 6.6 5.4 12 12 12l2-3.4-4.4-2.2-1.8 1.8c-1.8-1-3.4-2.6-4.4-4.4l1.8-1.8L7 2 4 4z"/></svg>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px">
+
+    <div class="bub" style="align-self:center;padding:4px 12px;border-radius:999px;background:{{t.surface2}};color:{{t.muted}};font-size:11px;font-weight:500">Today</div>
+
+    <sc-for list="{{messages}}" as="m" hint-placeholder-count="3">
+      <div style="position:relative;max-width:78%;align-self:{{m.align}}">
+        <div style="position:absolute;top:50%;{{m.iconSide}}:-34px;transform:translateY(-50%) scale({{m.iconScale}});opacity:{{m.iconOpacity}};transition:{{m.iconTransition}};width:26px;height:26px;border-radius:999px;background:{{t.a1}};display:flex;align-items:center;justify-content:center">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8,5 3,10 8,15"/><path d="M3 10h9a5 5 0 0 1 5 5v1"/></svg>
+        </div>
+        <div
+          onPointerDown="{{m.onDown}}"
+          onPointerMove="{{m.onMove}}"
+          onPointerUp="{{m.onUp}}"
+          onPointerLeave="{{m.onUp}}"
+          class="bub"
+          style="display:flex;flex-direction:column;gap:3px;align-items:{{m.align}};transform:translateX({{m.tx}}px);transition:{{m.transition}};touch-action:pan-y">
+          <div style="background:{{m.bg}};color:{{m.color}};border-radius:{{m.radius}};padding:10px 14px;font-size:15px;line-height:22px;box-shadow:{{m.shadow}}">{{m.text}}</div>
+          <div style="font-size:11px;color:{{t.muted}}">{{m.time}}</div>
+        </div>
+      </div>
+    </sc-for>
+
+  </div>
+
+  <sc-if value="{{hasReply}}" hint-placeholder-val="{{false}}">
+    <div class="replybar" style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:8px 12px;background:{{t.surface2}};border-top:1px solid {{t.border}}">
+      <div style="width:3px;align-self:stretch;border-radius:2px;background:{{t.a1}}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:700;color:{{t.a1}}">Replying to {{replyName}}</div>
+        <div style="font-size:12px;color:{{t.muted}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{replyText}}</div>
+      </div>
+      <div onClick="{{clearReply}}" style="width:26px;height:26px;border-radius:999px;background:{{t.surface}};display:flex;align-items:center;justify-content:center;color:{{t.muted}};flex-shrink:0">
+        <svg width="13" height="13" viewBox="0 0 20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{recording}}" hint-placeholder-val="{{false}}">
+    <div class="bub" style="flex-shrink:0;border-top:1px solid {{t.border}};background:{{t.surface}};padding:10px 14px calc(env(safe-area-inset-bottom,0px) + 10px);display:flex;align-items:center;gap:10px">
+      <div style="width:10px;height:10px;border-radius:999px;background:#ef4444;animation:waveGrow 900ms ease-in-out infinite"></div>
+      <div style="font-size:13px;color:{{t.muted}};flex-shrink:0">0:0{{recSeconds}}</div>
+      <div style="flex:1;display:flex;align-items:center;gap:3px;height:28px;overflow:hidden">
+        <div class="wavebar" style="width:3px;height:10px;border-radius:2px;background:{{t.a1}};animation-delay:0ms"></div>
+        <div class="wavebar" style="width:3px;height:18px;border-radius:2px;background:{{t.a1}};animation-delay:80ms"></div>
+        <div class="wavebar" style="width:3px;height:24px;border-radius:2px;background:{{t.a1}};animation-delay:160ms"></div>
+        <div class="wavebar" style="width:3px;height:14px;border-radius:2px;background:{{t.a1}};animation-delay:240ms"></div>
+        <div class="wavebar" style="width:3px;height:20px;border-radius:2px;background:{{t.a1}};animation-delay:320ms"></div>
+        <div class="wavebar" style="width:3px;height:10px;border-radius:2px;background:{{t.a1}};animation-delay:400ms"></div>
+        <div class="wavebar" style="width:3px;height:16px;border-radius:2px;background:{{t.a1}};animation-delay:480ms"></div>
+      </div>
+      <div style="font-size:11px;color:{{t.muted}};flex-shrink:0">← slide to cancel</div>
+      <div onClick="{{toggleRecording}}" class="pressable" style="width:36px;height:36px;border-radius:30%;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:0 4px 14px {{t.a1}}55">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="7.5" y="3" width="5" height="9" rx="2.5"/><path d="M4 10a6 6 0 0 0 12 0"/><line x1="10" y1="16" x2="10" y2="18"/></svg>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{notRecording}}" hint-placeholder-val="{{true}}">
+    <div style="flex-shrink:0;border-top:1px solid {{t.border}};background:{{t.surface}};padding:8px 12px calc(env(safe-area-inset-bottom,0px) + 8px);display:flex;align-items:flex-end;gap:8px">
+      <div class="pressable" style="width:36px;height:36px;border-radius:30%;display:flex;align-items:center;justify-content:center;color:{{t.muted}};flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 6.5l-6 6a2.6 2.6 0 0 0 3.7 3.7l6-6a4.2 4.2 0 0 0-6-6l-6 6a1.8 1.8 0 0 0 2.5 2.5"/></svg>
+      </div>
+      <div style="flex:1;min-height:36px;border-radius:18px;background:{{t.surface2}};display:flex;align-items:center;padding:0 14px;font-size:15px;color:{{t.muted}}">Message…</div>
+      <div onClick="{{toggleRecording}}" class="pressable" style="width:36px;height:36px;border-radius:30%;background:linear-gradient(135deg,{{t.a1}},{{t.a2}});display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:0 4px 14px {{t.a1}}55">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="7.5" y="3" width="5" height="9" rx="2.5"/><path d="M4 10a6 6 0 0 0 12 0"/><line x1="10" y1="16" x2="10" y2="18"/></svg>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:absolute;left:14px;bottom:100px;font-size:10px;color:{{t.muted}};opacity:.55">swipe a bubble → reply · hold mic to record</div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","default":"daybreak","options":["daybreak","aurora","meadow","midnightRose","mono"],"section":"Theme"}}'>
+const THEMES = {
+  daybreak:     { bg:'#fbf7f2', surface:'#ffffff', surface2:'#f4ede4', fg:'#241c15', muted:'#8a7b6c', border:'#ece1d3', a1:'#fb7185', a2:'#f59e0b', bubbleOther:'#ffffff' },
+  aurora:       { bg:'#0f1220', surface:'#171a2b', surface2:'#1f2338', fg:'#eef0fb', muted:'#8b90b8', border:'#2a2f4a', a1:'#8b5cf6', a2:'#22d3ee', bubbleOther:'#1f2338' },
+  meadow:       { bg:'#f2f8f4', surface:'#ffffff', surface2:'#e7f3ea', fg:'#132318', muted:'#6f8a78', border:'#dcebe0', a1:'#0d9488', a2:'#84cc16', bubbleOther:'#ffffff' },
+  midnightRose: { bg:'#180f1c', surface:'#231729', surface2:'#2c1d34', fg:'#f6ecf7', muted:'#a389ac', border:'#392a42', a1:'#c026d3', a2:'#fb7185', bubbleOther:'#2c1d34' },
+  mono:         { bg:'#f4f3ef', surface:'#fffdf9', surface2:'#eae8e1', fg:'#18181b', muted:'#71717a', border:'#e0ded5', a1:'#27272a', a2:'#71717a', bubbleOther:'#fffdf9' },
+};
+const OPEN_X = 54;
+const REPLY_THRESHOLD = 34;
+
+class Component extends DCLogic {
+  renderVals() {
+    const t = THEMES[this.props.theme] ?? THEMES.daybreak;
+    const dragId = this.state.dragId ?? null;
+    const startX = this.state.startX ?? 0;
+    const curX = this.state.curX ?? 0;
+    const replyId = this.state.replyId ?? null;
+
+    const msgDefs = [
+      { id: 'm1', mine: false, name: 'Dad', text: "Dinner's at 8 tonight, don't be late!", time: '2:14 PM' },
+      { id: 'm2', mine: true, name: 'You', text: 'Can I bring dessert? 🍰', time: '2:16 PM' },
+      { id: 'm3', mine: false, name: 'Dad', text: 'Of course, the more the merrier 😄', time: '2:17 PM' },
+    ];
+
+    const messages = msgDefs.map((m) => {
+      const isDragging = dragId === m.id;
+      const dir = m.mine ? -1 : 1;
+      let tx = 0;
+      if (isDragging) {
+        const raw = (curX - startX) * dir;
+        tx = dir * Math.max(0, Math.min(OPEN_X + 10, raw));
+      }
+      const progress = Math.min(1, Math.abs(tx) / OPEN_X);
+      return {
+        align: m.mine ? 'flex-end' : 'flex-start',
+        iconSide: m.mine ? 'left' : 'right',
+        iconOpacity: progress,
+        iconScale: (0.5 + progress * 0.5).toFixed(2),
+        iconTransition: isDragging ? 'none' : 'opacity 200ms ease, transform 200ms ease',
+        tx,
+        transition: isDragging ? 'none' : 'transform 220ms cubic-bezier(.16,1,.3,1)',
+        bg: m.mine ? `linear-gradient(135deg,${t.a1},${t.a2})` : t.bubbleOther,
+        color: m.mine ? '#ffffff' : t.fg,
+        radius: m.mine ? '22px 6px 22px 22px' : '6px 22px 22px 22px',
+        shadow: m.mine ? `0 6px 16px ${t.a1}35` : `0 1px 2px rgba(0,0,0,.05)`,
+        text: m.text,
+        time: m.time,
+        onDown: (e) => this.setState({ dragId: m.id, startX: e.clientX, curX: e.clientX }),
+        onMove: (e) => { if (dragId === m.id) this.setState({ curX: e.clientX }); },
+        onUp: () => {
+          if (dragId !== m.id) return;
+          const raw = (curX - startX) * dir;
+          this.setState({ dragId: null, replyId: raw > REPLY_THRESHOLD ? m.id : replyId });
+        },
+      };
+    });
+
+    const replyMsg = msgDefs.find((m) => m.id === replyId) ?? null;
+    const recording = this.state.recording ?? false;
+
+    return {
+      t,
+      messages,
+      hasReply: !!replyMsg,
+      replyName: replyMsg?.name ?? '',
+      replyText: replyMsg?.text ?? '',
+      clearReply: () => this.setState({ replyId: null }),
+      recording,
+      notRecording: !recording,
+      recSeconds: 7,
+      toggleRecording: () => this.setState({ recording: !recording }),
+    };
+  }
+}
+</script>
+</body>
+</html>

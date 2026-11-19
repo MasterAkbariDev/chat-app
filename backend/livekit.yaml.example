@@ -1,0 +1,44 @@
+# Self-hosted LiveKit config (B8, docs/plans/BACKEND_PLAN.md). Copy to `livekit.yaml` (gitignored
+# — it holds the real API secret) and fill in your own generated key/secret pair. These aren't
+# obtained from anywhere external — generate them yourself, e.g.:
+#   API_KEY:    devkey$(openssl rand -hex 6)
+#   API_SECRET: $(openssl rand -hex 32)
+# The SAME pair must also be set as LIVEKIT_API_KEY / LIVEKIT_API_SECRET in .env — the backend
+# uses them to sign room-join JWTs, and LiveKit uses them to verify those JWTs; if they don't
+# match on both sides, every token this app issues is rejected.
+
+port: 7880
+
+rtc:
+  tcp_port: 7881
+  # Small range for local dev — a real deployment on the open internet wants a wider one
+  # (each concurrent publisher/subscriber can need its own UDP port).
+  port_range_start: 51000
+  port_range_end: 51100
+  # Local dev only: LiveKit is reachable directly on localhost, no NAT to traverse.
+  # A real deployment sets this to the server's actual public IP.
+  use_external_ip: false
+  # Required for local dev when LiveKit runs inside Docker (this project's compose setup) —
+  # without it, LiveKit advertises its own container-internal IP as ICE candidates, which no
+  # client outside the container's network can ever reach, so calls connect their signaling but
+  # every media (audio/video) negotiation times out. docker-compose.yml publishes the RTC port
+  # ranges straight through to the host, so 127.0.0.1 is correctly reachable from a client on
+  # the same machine.
+  node_ip: 127.0.0.1
+  # NOT YET SET (local dev has no public address to advertise). Uncomment and fill in
+  # <YOUR_SERVER_PUBLIC_IP_OR_DOMAIN> when deploying, so clients whose direct/UDP path is
+  # blocked can fall back to the self-hosted coturn relay. Username/password must match
+  # coturn's `--user=` in docker-compose.yml (same TURN_SECRET as .env).
+  # ice_servers:
+  #   - urls: ["turn:<YOUR_SERVER_PUBLIC_IP_OR_DOMAIN>:3478?transport=udp"]
+  #     username: livekit
+  #     credential: YOUR_GENERATED_API_SECRET_OR_TURN_SECRET
+
+keys:
+  YOUR_GENERATED_API_KEY: YOUR_GENERATED_API_SECRET
+
+# This app runs its own separate coturn container for TURN (see docker-compose.yml) rather than
+# LiveKit's built-in TURN server, matching the plan's explicit "LiveKit (SFU) + coturn (TURN)"
+# split — so LiveKit's own TURN integration stays off here.
+turn:
+  enabled: false

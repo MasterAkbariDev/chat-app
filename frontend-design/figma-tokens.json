@@ -1,0 +1,198 @@
+{
+  "$schema": "https://raw.githubusercontent.com/tokens-studio/figma-plugin/main/packages/types/schema.json",
+  "name": "ChatApp Design Tokens",
+  "version": "1.0.0",
+  "description": "Figma-compatible tokens conforming to W3C Design Tokens Community Group specification. Supports 5 themes (Daybreak, Aurora, Meadow, Rose, Mono) and dark/light modes.",
+  "global": {
+    "spacing": {
+      "0": { "$value": "0px", "$type": "dimension" },
+      "1": { "$value": "4px", "$type": "dimension" },
+      "2": { "$value": "8px", "$type": "dimension" },
+      "3": { "$value": "12px", "$type": "dimension" },
+      "4": { "$value": "16px", "$type": "dimension" },
+      "5": { "$value": "20px", "$type": "dimension" },
+      "6": { "$value": "24px", "$type": "dimension" },
+      "8": { "$value": "32px", "$type": "dimension" },
+      "10": { "$value": "40px", "$type": "dimension" },
+      "12": { "$value": "48px", "$type": "dimension" },
+      "16": { "$value": "64px", "$type": "dimension" }
+    },
+    "borderRadius": {
+      "none": { "$value": "0px", "$type": "dimension" },
+      "xs": { "$value": "4px", "$type": "dimension" },
+      "sm": { "$value": "8px", "$type": "dimension" },
+      "md": { "$value": "12px", "$type": "dimension" },
+      "lg": { "$value": "16px", "$type": "dimension" },
+      "xl": { "$value": "20px", "$type": "dimension" },
+      "2xl": { "$value": "24px", "$type": "dimension" },
+      "full": { "$value": "9999px", "$type": "dimension" }
+    },
+    "fontFamilies": {
+      "sans": { "$value": "Geist, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif", "$type": "fontFamily" },
+      "persian": { "$value": "Vazirmatn, -apple-system, BlinkMacSystemFont, sans-serif", "$type": "fontFamily" },
+      "display": { "$value": "Sora, Geist, sans-serif", "$type": "fontFamily" },
+      "mono": { "$value": "Geist Mono, ui-monospace, SFMono-Regular, monospace", "$type": "fontFamily" }
+    },
+    "fontSizes": {
+      "caption": { "$value": "11px", "$type": "dimension" },
+      "small": { "$value": "13px", "$type": "dimension" },
+      "body": { "$value": "15px", "$type": "dimension" },
+      "title": { "$value": "17px", "$type": "dimension" },
+      "display": { "$value": "22px", "$type": "dimension" },
+      "hero": { "$value": "28px", "$type": "dimension" }
+    },
+    "lineHeights": {
+      "caption": { "$value": "14px", "$type": "dimension" },
+      "small": { "$value": "18px", "$type": "dimension" },
+      "body": { "$value": "22px", "$type": "dimension" },
+      "title": { "$value": "24px", "$type": "dimension" },
+      "display": { "$value": "28px", "$type": "dimension" },
+      "hero": { "$value": "34px", "$type": "dimension" }
+    },
+    "fontWeights": {
+      "regular": { "$value": "400", "$type": "fontWeight" },
+      "medium": { "$value": "500", "$type": "fontWeight" },
+      "semibold": { "$value": "600", "$type": "fontWeight" },
+      "bold": { "$value": "700", "$type": "fontWeight" }
+    },
+    "elevation": {
+      "elev-0": {
+        "$value": {
+          "color": "rgba(0, 0, 0, 0)",
+          "offsetX": "0px",
+          "offsetY": "0px",
+          "blur": "0px",
+          "spread": "0px"
+        },
+        "$type": "boxShadow"
+      },
+      "elev-1": {
+        "$value": [
+          { "color": "rgba(0, 0, 0, 0.05)", "offsetX": "0px", "offsetY": "1px", "blur": "3px", "spread": "0px" },
+          { "color": "rgba(0, 0, 0, 0.03)", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" }
+        ],
+        "$type": "boxShadow"
+      },
+      "elev-2": {
+        "$value": [
+          { "color": "rgba(0, 0, 0, 0.12)", "offsetX": "0px", "offsetY": "10px", "blur": "30px", "spread": "-5px" },
+          { "color": "rgba(0, 0, 0, 0.08)", "offsetX": "0px", "offsetY": "4px", "blur": "12px", "spread": "-2px" }
+        ],
+        "$type": "boxShadow"
+      },
+      "elev-glass": {
+        "$value": [
+          { "color": "rgba(0, 0, 0, 0.18)", "offsetX": "0px", "offsetY": "16px", "blur": "40px", "spread": "-8px" }
+        ],
+        "$type": "boxShadow"
+      }
+    },
+    "motion": {
+      "ease-out-expo": { "$value": "cubic-bezier(0.16, 1, 0.3, 1)", "$type": "transitionTimingFunction" },
+      "ease-out-back": { "$value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "$type": "transitionTimingFunction" },
+      "duration-fast": { "$value": "120ms", "$type": "duration" },
+      "duration-base": { "$value": "180ms", "$type": "duration" },
+      "duration-slow": { "$value": "260ms", "$type": "duration" }
+    }
+  },
+  "themes": {
+    "daybreak": {
+      "light": {
+        "bg": { "$value": "#f4f5f9", "$type": "color" },
+        "surface": { "$value": "#ffffff", "$type": "color" },
+        "surface2": { "$value": "#f8f9fc", "$type": "color" },
+        "surfaceElevated": { "$value": "#ffffff", "$type": "color" },
+        "border": { "$value": "#e2e5ef", "$type": "color" },
+        "borderSubtle": { "$value": "#f0f2f8", "$type": "color" },
+        "fg": { "$value": "#181a27", "$type": "color" },
+        "muted": { "$value": "#5b6178", "$type": "color" },
+        "accent": { "$value": "#6366f1", "$type": "color" },
+        "accentLight": { "$value": "#818cf8", "$type": "color" },
+        "accentSoft": { "$value": "#eef0ff", "$type": "color" },
+        "accentForeground": { "$value": "#ffffff", "$type": "color" },
+        "bubbleOwn": { "$value": "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)", "$type": "color" },
+        "bubbleOwnFg": { "$value": "#ffffff", "$type": "color" },
+        "danger": { "$value": "#ef4444", "$type": "color" },
+        "dangerSoft": { "$value": "#fef2f2", "$type": "color" },
+        "success": { "$value": "#10b981", "$type": "color" },
+        "successSoft": { "$value": "#ecfdf5", "$type": "color" },
+        "warning": { "$value": "#f59e0b", "$type": "color" },
+        "warningSoft": { "$value": "#fffbeb", "$type": "color" }
+      },
+      "dark": {
+        "bg": { "$value": "#0f1019", "$type": "color" },
+        "surface": { "$value": "#171827", "$type": "color" },
+        "surface2": { "$value": "#212237", "$type": "color" },
+        "surfaceElevated": { "$value": "#252740", "$type": "color" },
+        "border": { "$value": "#282a45", "$type": "color" },
+        "borderSubtle": { "$value": "#1c1e33", "$type": "color" },
+        "fg": { "$value": "#eef0f8", "$type": "color" },
+        "muted": { "$value": "#878ea7", "$type": "color" },
+        "accent": { "$value": "#818cf8", "$type": "color" },
+        "accentLight": { "$value": "#a5b4fc", "$type": "color" },
+        "accentSoft": { "$value": "rgba(99, 102, 241, 0.16)", "$type": "color" },
+        "accentForeground": { "$value": "#0c0d16", "$type": "color" },
+        "bubbleOwn": { "$value": "linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)", "$type": "color" },
+        "bubbleOwnFg": { "$value": "#ffffff", "$type": "color" },
+        "danger": { "$value": "#f87171", "$type": "color" },
+        "dangerSoft": { "$value": "rgba(239, 68, 68, 0.16)", "$type": "color" },
+        "success": { "$value": "#34d399", "$type": "color" },
+        "successSoft": { "$value": "rgba(16, 185, 129, 0.16)", "$type": "color" },
+        "warning": { "$value": "#fbbf24", "$type": "color" },
+        "warningSoft": { "$value": "rgba(245, 158, 11, 0.16)", "$type": "color" }
+      }
+    },
+    "aurora": {
+      "dark": {
+        "bg": { "$value": "#0b1416", "$type": "color" },
+        "surface": { "$value": "#112022", "$type": "color" },
+        "surface2": { "$value": "#1a3034", "$type": "color" },
+        "surfaceElevated": { "$value": "#223d42", "$type": "color" },
+        "border": { "$value": "#234145", "$type": "color" },
+        "fg": { "$value": "#e6faf8", "$type": "color" },
+        "muted": { "$value": "#79a3a2", "$type": "color" },
+        "accent": { "$value": "#14b8a6", "$type": "color" },
+        "accentLight": { "$value": "#2dd4bf", "$type": "color" },
+        "accentSoft": { "$value": "rgba(20, 184, 166, 0.18)", "$type": "color" },
+        "bubbleOwn": { "$value": "linear-gradient(135deg, #0d9488 0%, #059669 100%)", "$type": "color" }
+      }
+    },
+    "meadow": {
+      "light": {
+        "bg": { "$value": "#f7f7f2", "$type": "color" },
+        "surface": { "$value": "#ffffff", "$type": "color" },
+        "surface2": { "$value": "#f0efe8", "$type": "color" },
+        "border": { "$value": "#e3e1d5", "$type": "color" },
+        "fg": { "$value": "#22251e", "$type": "color" },
+        "muted": { "$value": "#686e5e", "$type": "color" },
+        "accent": { "$value": "#65a30d", "$type": "color" },
+        "bubbleOwn": { "$value": "linear-gradient(135deg, #65a30d 0%, #4d7c0f 100%)", "$type": "color" }
+      }
+    },
+    "rose": {
+      "light": {
+        "bg": { "$value": "#faf5f6", "$type": "color" },
+        "surface": { "$value": "#ffffff", "$type": "color" },
+        "surface2": { "$value": "#f7ebed", "$type": "color" },
+        "border": { "$value": "#eed8dc", "$type": "color" },
+        "fg": { "$value": "#281b1e", "$type": "color" },
+        "muted": { "$value": "#7d6268", "$type": "color" },
+        "accent": { "$value": "#e11d48", "$type": "color" },
+        "bubbleOwn": { "$value": "linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)", "$type": "color" }
+      }
+    },
+    "mono": {
+      "dark": {
+        "bg": { "$value": "#09090b", "$type": "color" },
+        "surface": { "$value": "#18181b", "$type": "color" },
+        "surface2": { "$value": "#27272a", "$type": "color" },
+        "border": { "$value": "#3f3f46", "$type": "color" },
+        "fg": { "$value": "#fafafa", "$type": "color" },
+        "muted": { "$value": "#a1a1aa", "$type": "color" },
+        "accent": { "$value": "#f4f4f5", "$type": "color" },
+        "accentForeground": { "$value": "#09090b", "$type": "color" },
+        "bubbleOwn": { "$value": "linear-gradient(135deg, #3f3f46 0%, #27272a 100%)", "$type": "color" }
+      }
+    }
+  }
+}
